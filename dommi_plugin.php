@@ -23,7 +23,7 @@ function your_function() {
 }
 function cabezera(){
   echo "sebas";
-  ?>
+  
 }
 
 
