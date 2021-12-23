@@ -1,0 +1,13 @@
+{
+    "name": "hache/products",
+    "description": "este es un plugin para controlar Dommi en cuestion de productos",
+    "authors": [
+        {
+            "name": "Harvey-46904",
+            "email": "harveympv@hotmail.com"
+        }
+    ],
+    "require": {
+        "automattic/woocommerce": "^3.0"
+    }
+}
