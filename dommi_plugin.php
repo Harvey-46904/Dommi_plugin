@@ -22,7 +22,15 @@ function your_function() {
     <?php
 }
 function cabezera(){
-  echo "hola sebas saludo desde el plugin";
+  if ( is_user_logged_in() )
+  {
+      echo 'El usuario ha iniciado sesión';
+  }
+  else
+  {
+      echo 'El visitante no ha iniciado sesión';
+  }
+  ?>
 }
 
 
