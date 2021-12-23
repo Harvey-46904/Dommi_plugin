@@ -13,13 +13,16 @@ use Automattic\WooCommerce\Client;
 
 
 add_shortcode('dommi-domicilios', 'formulario_domicilio');
-//add_action( 'wp_head', 'agregar_ga' );
+add_action( 'wp_head', 'cabezera' );
 add_action( 'wp_footer', 'your_function' );
 
 function your_function() {
     ?>
 
     <?php
+}
+function cabezera(){
+  echo "hola sebas saludo desde el plugin";
 }
 
 
