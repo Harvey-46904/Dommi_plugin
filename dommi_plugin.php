@@ -14,9 +14,6 @@ require_once(ABSPATH.'wp-includes/pluggable.php');
 use Automattic\WooCommerce\Client;
 
 
-add_shortcode('dommi-domicilios', 'formulario_domicilio');
-add_action( 'wp_head', 'url_actual' );
-add_action( 'wp_footer', 'your_function' );
 add_shortcode('domicilios_dommi', 'domicilio_Dommi');
 function your_function() {
     ?>
@@ -27,7 +24,7 @@ function your_function() {
 function url_actual(){
   global $wp;
   $url_actual = $slug = basename(get_permalink());
-  echo $url_actual;
+  return $url_actual;
 }
 function comprobar_sesion(){
   if(is_user_logged_in()){
@@ -188,7 +185,10 @@ function formulario_domicilio()
 function domicilio_Dommi(){
   ob_start();
   if(is_user_logged_in()){
+    $transporte=url_actual();
+    echo '<script language="javascript">alert("'.$transporte.'");</script>';
   ?>
+  
   <div id="form-domicilios" >
     
     <form action="<?php get_the_permalink(); ?>" method="POST" >
