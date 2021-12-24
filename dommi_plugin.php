@@ -10,11 +10,45 @@ License: GPLv2
 */
 require __DIR__ . '/vendor/autoload.php';
 require_once(ABSPATH.'wp-includes/pluggable.php');
-
 use Automattic\WooCommerce\Client;
-
+// Cuando el plugin se active se crea la tabla para recoger los datos si no existe
+register_activation_hook(__FILE__, 'tbl_domiciliarios');
+ 
+/**
+ * Crea la tabla para recoger los datos del formulario
+ *
+ * @return void
+ */
+function tbl_domiciliarios() 
+{
+    global $wpdb; // Este objeto global permite acceder a la base de datos de WP
+    // Crea la tabla sólo si no existe
+    // Utiliza el mismo prefijo del resto de tablas
+    $tabla_aspirantes = $wpdb->prefix . 'dommis';
+    // Utiliza el mismo tipo de orden de la base de datos
+    $charset_collate = $wpdb->get_charset_collate();
+    // Prepara la consulta
+    $query = "CREATE TABLE IF NOT EXISTS $tabla_aspirantes (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        name_user varchar(40) NOT NULL,
+        correo varchar(100) NOT NULL,
+        Nombre varchar(100) NOT NULL,
+        Apellido varchar(100) NOT NULL,
+        Celular varchar(100) NOT NULL,
+        Contraseña varchar(100) NOT NULL,
+        Documentos varchar(100) NOT NULL,
+        created_at datetime NOT NULL,
+        UNIQUE (id)
+        ) $charset_collate;";
+    // La función dbDelta permite crear tablas de manera segura se
+    // define en el archivo upgrade.php que se incluye a continuación
+    include_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    dbDelta($query); // Lanza la consulta para crear la tabla de manera segura
+}
 
 add_shortcode('domicilios_dommi', 'domicilio_Dommi');
+add_shortcode('mensajero_dommi', 'registro_mensajero');
+
 function your_function() {
     ?>
 
@@ -183,6 +217,7 @@ function formulario_domicilio()
 
 
 function domicilio_Dommi(){
+
   ob_start();
   if(is_user_logged_in()){
     $transporte=url_actual();
@@ -215,51 +250,194 @@ function domicilio_Dommi(){
       <div class="form-group">
         <label style="color:#390066">¿Qué deseas?</label>
         <textarea class="form-control" id="deseo" rows="3" name="deseo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
-"></textarea>
-      </div>
+  "></textarea>
+        </div>
+        
       
-     
-      <div class="form-group">
-        <label style="color:#390066">¿Nombres de quien recibe?</label>
-        <input type="text" class="form-control" name="nombre_recibe">
+        <div class="form-group">
+          <label style="color:#390066">¿Nombres de quien recibe?</label>
+          <input type="text" class="form-control" name="nombre_recibe">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Dirección donde entregamos</label>
+          <input type="text" class="form-control" name="entrega">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Teléfonoo de quien recibe</label>
+          <input type="text" class="form-control" name="telefono_recibe">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Notas/Observaciones</label>
+          <textarea class="form-control" id="deseo" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
+  "></textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+      </form>
+      
+      </script>
       </div>
-      <br>
-      <div class="form-group">
-        <label style="color:#390066">Dirección donde entregamos</label>
-        <input type="text" class="form-control" name="entrega">
-      </div>
-      <br>
-      <div class="form-group">
-        <label style="color:#390066">Teléfonoo de quien recibe</label>
-        <input type="text" class="form-control" name="telefono_recibe">
-      </div>
-      <br>
-      <div class="form-group">
-        <label style="color:#390066">Notas/Observaciones</label>
-        <textarea class="form-control" id="deseo" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
-"></textarea>
-      </div>
-      <br>
-      <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
-    </form>
-    
-    </script>
-    </div>
 
-    <?php
-    // Devuelve el contenido del buffer de salida
-    return ob_get_clean();
-  }else {
-    
-    echo '<div class="alert alert-success">
-    <strong>Success!</strong> Indicates a successful or positive action.
-  </div>';
-    echo do_shortcode( ' [woocommerce_my_account] ' );
-  }
+      <?php
+      // Devuelve el contenido del buffer de salida
+      return ob_get_clean();
+    }else {
+      
+      echo '<div class="alert alert-danger" role="alert">
+      Debes estar registrado por motivos de facturación electrónica
+    </div>';
+      echo do_shortcode( ' [woocommerce_my_account] ' );
+
+      return ob_get_clean();
+    }
 }
 
 
+function registro_mensajero(){
+  global $wpdb;
+ if ($_POST['name_user'] != ''
+        AND $_POST['Nombre'] != ''
+        AND $_POST['Apellido'] != ''
+        AND $_POST['Celular'] != ''   
+        AND is_email($_POST['correo'])  
+        AND $_POST['Contraseña'] != ''     
+        AND $_POST['Documentos'] != ''      
+        AND wp_verify_nonce($_POST['aspirante_nonce'], 'graba_aspirante')
+
+    ){
+      $tabla_aspirantes = $wpdb->prefix . 'dommis';
+      $name_user = sanitize_text_field($_POST['name_user']);
+      $Nombre = sanitize_text_field($_POST['Nombre']);
+      $Apellido = sanitize_text_field($_POST['Apellido']);
+      $Celular = sanitize_text_field($_POST['Celular']);
+      $correo = sanitize_text_field($_POST['correo']);
+      $Contraseña = sanitize_text_field($_POST['Contraseña']);
+      $Documentos = sanitize_text_field($_POST['Documentos']);
+      $created_at = date('Y-m-d H:i:s');
+      $wpdb->insert(
+        $tabla_aspirantes,array(
+          'name_user'=> $name_user,
+          'Nombre'=> $Nombre,
+          'Apellido'=>$Apellido,
+          'Celular'=>$Celular,
+          'correo'=>$correo,
+          'Contraseña'=>$Contraseña,
+          'Documentos'=>$Documentos,
+          'created_at'=>$created_at,
+
+        )
+        );
+        echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
+        por tu interés. En breve contactaré contigo.<p>";
+    }
+    
+  ob_start();
+    
+  ?>
+  <div id="form-domicilios" >
+  
+  <form action="<?php get_the_permalink(); ?>" method="POST" >
+  <?php wp_nonce_field('graba_aspirante', 'aspirante_nonce'); ?>
+    <div class="form-group">
+      <label style="color:#390066">Nombre de Usuario</label>
+      <input type="text" class="form-control" name="name_user">
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066">Nombres</label>
+      <input type="text" class="form-control" name="Nombre">
+    </div>
+    <br>
+    <div class="form-group">
+      
+      <label style="color:#390066">Apellidos</label>
+      <input type="text" class="form-control" name="Apellido">
+    </div>
+    <div class="form-group">
+      <br>
+      <label style="color:#390066">Celular</label>
+      <input type="number" class="form-control" name="Celular">
+    </div>
+    <div class="form-group">
+      <label style="color:#390066">Correo</label>
+      <input type="email" class="form-control" name="correo">
+    </div>
+    <div class="form-group">
+      <label style="color:#390066">Contraseña</label>
+      <input type="password" class="form-control" name="Contraseña">
+    </div>
+    <div class="form-group">
+      <label style="color:#390066">Documentos</label>
+      <input type="text" class="form-control" name="Documentos">
+    </div>
+   
+  
+  
+    <br>
+    <button type="submit" class="btn btn-primary">REGISTRARSE</button>
+  </form>
+  
+  </script>
+  </div>
+
+  <?php
+  
+  // Devuelve el contenido del buffer de salida
+  return ob_get_clean();
 
 
+}
 
+
+ // El hook "admin_menu" permite agregar un nuevo item al menú de administración
+add_action("admin_menu", "dommi_menu");
  
+/**
+ * Agrega el menú del plugin al escritorio de WordPress
+ *
+ * @return void
+ */
+function dommi_menu() 
+{
+    add_menu_page(
+        'Solicitud Mensajeros', 'Aspirantes Mensajeros', 'manage_options', 
+        'aspirante_menu', 'Aspirante_admin', 'dashicons-feedback', 75
+    );
+}
+
+function Aspirante_admin()
+{
+    global $wpdb;
+    $tabla_aspirantes = $wpdb->prefix . 'dommis';
+    $aspirantes = $wpdb->get_results("SELECT * FROM $tabla_aspirantes");
+    echo '<div class="wrap"><h1>Lista de aspirantes Dommi</h1>';
+    echo '<table class="wp-list-table widefat fixed striped">
+    <thead>
+      <tr>
+        <th scope="col">Nombre Usuario</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Celular</th>
+        <th scope="col">Correo</th>
+        <th scope="col">Contraseña</th>
+        <th scope="col">Documentos</th>
+      </tr>
+    </thead>
+    <tbody>';
+       foreach ($aspirantes as $aspirante){
+         echo '<tr>';
+            echo '<td>'.esc_textarea($aspirante->name_user).'</td>';
+            echo '<td>'.$aspirante->Nombre.'</td>';
+            echo '<td>'.$aspirante->Apellido.'</td>';
+            echo '<td>'.$aspirante->Celular.'</td>';
+            echo '<td>'.$aspirante->correo.'</td>';
+            echo '<td>'.$aspirante->Contraseña.'</td>';
+            echo '<td>'.$aspirante->Documentos.'</td>';
+         echo '</tr>';
+       }
+       echo   '</tbody></table>';
+        
+}
