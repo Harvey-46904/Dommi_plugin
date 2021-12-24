@@ -250,7 +250,10 @@ function domicilio_Dommi(){
     // Devuelve el contenido del buffer de salida
     return ob_get_clean();
   }else {
-    echo 'Es necesario estar registrado';
+    
+    echo '<div class="alert alert-success">
+    <strong>Success!</strong> Indicates a successful or positive action.
+  </div>';
     echo do_shortcode( ' [woocommerce_my_account] ' );
   }
 }
