@@ -441,3 +441,14 @@ function Aspirante_admin()
        echo   '</tbody></table>';
         
 }
+
+
+add_action("wp_enqueue_scripts", "mys_scripts");
+function mys_scripts(){
+  //Cargar sólo en las entradas
+ 
+    wp_register_script('miscript', plugins_url('js/myscript.js',__FILE__), array('jquery'), '1', true );
+    wp_enqueue_script('miscript');
+  
+  
+}
