@@ -519,6 +519,7 @@ function Aspirante_admin()
             echo '<td>'.md5($aspirante->Contraseña).'</td>';
            // echo '<td>'.$aspirante->Documentos.'</td>';
            echo '<td><a href="../wp-content/zips/'.$aspirante->Documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
+           
          echo '</tr>';
        }
        echo   '</tbody></table>';
