@@ -10,6 +10,7 @@ License: GPLv2
 */
 require __DIR__ . '/vendor/autoload.php';
 require_once(ABSPATH.'wp-includes/pluggable.php');
+require_once(ABSPATH . 'wp-admin/includes/file.php');
 use Automattic\WooCommerce\Client;
 // Cuando el plugin se active se crea la tabla para recoger los datos si no existe
 register_activation_hook(__FILE__, 'tbl_domiciliarios');
@@ -295,8 +296,16 @@ function domicilio_Dommi(){
     }
 }
 
+function move_file($file, $to){
+  $path_parts = pathinfo($file);
+  $newplace   = "$to/{$path_parts['basename']}";
+  if(rename($file, $newplace))
+      return $newplace;
+  return null;
+}
 
 function registro_mensajero(){
+  $fecha= date("Y-m-d-H-i-s");
   global $wpdb;
  if ($_POST['name_user'] != ''
         AND $_POST['Nombre'] != ''
@@ -304,10 +313,74 @@ function registro_mensajero(){
         AND $_POST['Celular'] != ''   
         AND is_email($_POST['correo'])  
         AND $_POST['Contraseña'] != ''     
-        AND $_POST['Documentos'] != ''      
+        
+        AND isset($_FILES['upload-file'])  
+        AND isset($_FILES['upload-file1'])  
+        AND isset($_FILES['upload-file2'])      
         AND wp_verify_nonce($_POST['aspirante_nonce'], 'graba_aspirante')
-
     ){
+      global $wp_filesystem;
+      WP_Filesystem();
+      $name_file = $_FILES['upload-file']['name'];
+      $tmp_name = $_FILES['upload-file']['tmp_name'];
+      $nombres=$fecha."H".$name_file;
+
+      $name_file1 = $_FILES['upload-file1']['name'];
+      $tmp_name1 = $_FILES['upload-file1']['tmp_name'];
+      $nombres1=$fecha."H".$name_file1;
+
+      $name_file2 = $_FILES['upload-file2']['name'];
+      $tmp_name2 = $_FILES['upload-file2']['tmp_name'];
+      $nombres2=$fecha."H".$name_file2;
+
+      $allow_extensions = ['pdf', 'xlsx', 'csv'];
+      
+      // File type validation
+      $path_parts = pathinfo($name_file);
+      $path_parts1 = pathinfo($name_file1);
+      $path_parts2 = pathinfo($name_file2);
+      $ext = $path_parts['extension'];
+      $ext1 = $path_parts1['extension'];
+      $ext2 = $path_parts2['extension'];
+  
+      if ( !in_array($ext, $allow_extensions) && !in_array($ext1, $allow_extensions) && !in_array($ext2, $allow_extensions) ) {
+        echo "Error -El tipo de archivo permitido es PDF";
+        return;
+      }
+  
+      $content_directory = $wp_filesystem->wp_content_dir() . 'uploads/archivos-subidos/';
+      $wp_filesystem->mkdir( $content_directory );
+  
+      if( 
+        move_uploaded_file( $tmp_name, $content_directory .$nombres ) AND
+        move_uploaded_file( $tmp_name1, $content_directory .$nombres1 ) AND
+        move_uploaded_file( $tmp_name2, $content_directory .$nombres2 ) 
+      ) {
+        echo "Documento se a cargado";
+        $adarchivos = array();
+        $adarchivos = array(
+          $content_directory .$nombres,
+          $content_directory .$nombres1,
+          $content_directory .$nombres2
+
+      );
+      $save_name_zip="Documentos-".$fecha.'.zip';
+     $nombre_zip = 'wp-content/zips/'.$save_name_zip;
+     // $nombre_zip = 'killerh.zip';
+      $mizip = new ZipArchive();
+$mizip->open($nombre_zip, ZipArchive::CREATE);
+
+      foreach ($adarchivos as $nuevo){
+
+        $mizip->addFile($nuevo, str_replace($content_directory, '', $nuevo));
+    }
+  
+
+      } else {
+         echo "The file was not uploaded";
+      }
+
+
       $tabla_aspirantes = $wpdb->prefix . 'dommis';
       $name_user = sanitize_text_field($_POST['name_user']);
       $Nombre = sanitize_text_field($_POST['Nombre']);
@@ -325,7 +398,7 @@ function registro_mensajero(){
           'Celular'=>$Celular,
           'correo'=>$correo,
           'Contraseña'=>$Contraseña,
-          'Documentos'=>$Documentos,
+          'Documentos'=>$save_name_zip,
           'created_at'=>$created_at,
 
         )
@@ -339,7 +412,7 @@ function registro_mensajero(){
   ?>
   <div id="form-domicilios" >
   
-  <form action="<?php get_the_permalink(); ?>" method="POST" >
+  <form action="<?php get_the_permalink(); ?>" method="POST" enctype="multipart/form-data">
   <?php wp_nonce_field('graba_aspirante', 'aspirante_nonce'); ?>
     <div class="form-group">
       <label style="color:#390066">Nombre de Usuario</label>
@@ -369,9 +442,18 @@ function registro_mensajero(){
       <label style="color:#390066">Contraseña</label>
       <input type="password" class="form-control" name="Contraseña">
     </div>
+    <h3>Documentos de vehículo</h3>
     <div class="form-group">
-      <label style="color:#390066">Documentos</label>
-      <input type="text" class="form-control" name="Documentos">
+      <label style="color:#390066">Cédula de Ciudadanía</label><br>
+      <input name="upload-file" type="file" />
+    </div>
+    <div class="form-group">
+      <label style="color:#390066">Tarjeta de Propiedad</label><br>
+      <input name="upload-file1" type="file" />
+    </div>
+    <div class="form-group">
+      <label style="color:#390066">Soat/Tecnomecánica </label><br>
+      <input name="upload-file2" type="file" />
     </div>
    
   
@@ -434,12 +516,13 @@ function Aspirante_admin()
             echo '<td>'.$aspirante->Apellido.'</td>';
             echo '<td>'.$aspirante->Celular.'</td>';
             echo '<td>'.$aspirante->correo.'</td>';
-            echo '<td>'.$aspirante->Contraseña.'</td>';
-            echo '<td>'.$aspirante->Documentos.'</td>';
+            echo '<td>'.md5($aspirante->Contraseña).'</td>';
+           // echo '<td>'.$aspirante->Documentos.'</td>';
+           echo '<td><a href="../wp-content/zips/'.$aspirante->Documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
          echo '</tr>';
        }
        echo   '</tbody></table>';
-        
+      
 }
 
 
@@ -449,6 +532,51 @@ function mys_scripts(){
  
     wp_register_script('miscript', plugins_url('js/myscript.js',__FILE__), array('jquery'), '1', true );
     wp_enqueue_script('miscript');
+}
+
+add_shortcode('archivos_dommi', 'cargar_archivos');
+function cargar_archivos(){
+  $fecha= date("Y-m-d-H-i-s");
+  echo gettype( $fecha);
+  if(isset($_FILES['upload-file'])) {
+		global $wp_filesystem;
+		WP_Filesystem();
+   
+		$name_file = $_FILES['upload-file']['name'];
+		$tmp_name = $_FILES['upload-file']['tmp_name'];
+		$allow_extensions = ['pdf', 'xlsx', 'csv'];
+    $nombres=$fecha."H".$name_file;
+		// File type validation
+		$path_parts = pathinfo($name_file);
+		$ext = $path_parts['extension'];
+
+		if ( ! in_array($ext, $allow_extensions) ) {
+			echo "Error -El tipo de archivo permitod es PDF";
+			return;
+		}
+
+		$content_directory = $wp_filesystem->wp_content_dir() . 'uploads/archivos-subidos/';
+		$wp_filesystem->mkdir( $content_directory );
+
+		if( move_uploaded_file( $tmp_name, $content_directory .$nombres ) ) {
+			echo "File was successfully uploaded";
+		} else {
+			echo "The file was not uploaded";
+		}
+	}
+  ob_start();
+
+  ?>
+<div class="wrap">
+		<h1>Ejemplo de subida de archivo</h1>
+		<br>
+		<form enctype="multipart/form-data" method="post">
+			Selecciona algún archivo: <input name="upload-file" type="file" /> <hr>
+			<input type="submit" value="Enviar archivo" />
+		</form>
+	</div>
+<?php
   
-  
+  // Devuelve el contenido del buffer de salida
+  return ob_get_clean();
 }
