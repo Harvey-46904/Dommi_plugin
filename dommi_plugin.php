@@ -47,7 +47,10 @@ function tbl_domiciliarios()
     dbDelta($query); // Lanza la consulta para crear la tabla de manera segura
 }
 
-add_shortcode('domicilios_dommi', 'domicilio_Dommi');
+add_shortcode('domicilios_dommi_moto', 'domicilio_Dommi_moto');
+add_shortcode('domicilio_Dommi_piagio', 'domicilio_Dommi_piagio');
+add_shortcode('domicilio_Dommi_vehiculo', ' domicilio_Dommi_vehiculo');
+add_shortcode('domicilio_Dommi_carguero', 'domicilio_Dommi_carguero');
 add_shortcode('mensajero_dommi', 'registro_mensajero');
 
 function your_function() {
@@ -217,31 +220,35 @@ function formulario_domicilio()
 }
 
 
-function domicilio_Dommi(){
-
+function domicilio_Dommi_moto(){
   ob_start();
   if(is_user_logged_in()){
+   $sesiones=obtener_datos_de_sesion();
+   
+   $nombre=$sesiones[0];
+  $cel=315;
+  $correo=$sesiones[1];
+
     $transporte=url_actual();
     echo '<script language="javascript">alert("'.$transporte.'");</script>';
   ?>
-  
   <div id="form-domicilios" >
     
     <form action="<?php get_the_permalink(); ?>" method="POST" >
       <div class="form-group">
         <label style="color:#390066">Nombres</label>
-        <input type="text" class="form-control" name="nombres">
+        <input type="text" class="form-control" name="nombres" id="nombres" value="<?php echo $nombre; ?>">
       </div>
      
       <div class="form-group">
         <label style="color:#390066">Teléfono / Celular</label>
-        <input type="text" class="form-control" name="contacto">
+        <input type="text" class="form-control" name="contacto" value="<?php echo $cel; ?>">
       </div>
       <br>
       <div class="form-group">
         <br>
         <label style="color:#390066">Correo electrónico</label>
-        <input type="email" class="form-control" name="email">
+        <input type="email" class="form-control" name="email" value="<?php echo $correo; ?>">
       </div>
       <div class="form-group">
         <label style="color:#390066">Dirección donde recogemos</label>
@@ -295,6 +302,261 @@ function domicilio_Dommi(){
       return ob_get_clean();
     }
 }
+
+function domicilio_Dommi_piagio(){
+  ob_start();
+  if(is_user_logged_in()){
+    $sesiones=obtener_datos_de_sesion();
+   
+   $nombre=$sesiones[0];
+  $cel=315;
+  $correo=$sesiones[1];
+    $transporte=url_actual();
+    echo '<script language="javascript">alert("'.$transporte.'");</script>';
+  ?>
+      <div id="form-domicilios" >
+    
+        <form action="<?php get_the_permalink(); ?>" method="POST" >
+        <div class="form-group">
+        <label style="color:#390066">Nombres</label>
+        <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domipiaggio" name="nombres-domipiaggio" style="background-color:#DFD5ED;">
+      </div>
+     
+      <div class="form-group">
+        <label style="color:#390066">Teléfono / Celular</label>
+        <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domipiaggio" name="tel-domipiaggioo" style="background-color:#DFD5ED;">
+      </div>
+      
+      <div class="form-group">
+        <br>
+        <label style="color:#390066">Correo electrónico</label>
+        <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domipiaggio" name="email-domipiaggio" style="background-color:#DFD5ED;">
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Dirección donde recogemos</label>
+        <input type="text" class="form-control" id="recogida-domipiaggio" name="recogida-domipiaggio" style="background-color:#DFD5ED;">
+      </div>
+      
+      <div class="form-group">
+        <label style="color:#390066">¿Qué deseas?</label>
+        <textarea class="form-control" id="deseo-domipiaggio" rows="3" name="deseo-domipiaggio" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
+  " style="background-color:#DFD5ED;"></textarea>
+        </div>
+        
+      
+        <div class="form-group">
+          <label style="color:#390066">¿Nombres de quien recibe?</label>
+          <input type="text" class="form-control" id="recibe-domipiaggio" name="recibe-domipiaggio" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Dirección donde entregamos</label>
+          <input type="text" class="form-control" id="direntrega-domipiaggio" name="direntrega-domipiaggio" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Teléfono de quien recibe</label>
+          <input type="text" class="form-control" id="telrecibe-domipiaggio" name="telrecibe-domipiaggio" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Notas/Observaciones</label>
+          <textarea class="form-control" id="notas-domipiaggio" rows="3" name="notas-domipiaggio" placeholder="Información adicional o necesaria para el domicilio.
+  " style="background-color:#DFD5ED;"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+        </div>
+      </form>
+      
+    
+      </div>
+
+      <?php
+      // Devuelve el contenido del buffer de salida
+      return ob_get_clean();
+    }else {
+      
+      echo '<div class="alert alert-danger" role="alert">
+      Debes estar registrado por motivos de facturación electrónica
+    </div>';
+      echo do_shortcode( ' [woocommerce_my_account] ' );
+
+      return ob_get_clean();
+    }
+}
+
+function domicilio_Dommi_vehiculo(){
+  ob_start();
+  if(is_user_logged_in()){
+
+    $sesiones=obtener_datos_de_sesion();
+   
+   $nombre=$sesiones[0];
+  $cel=315;
+  $correo=$sesiones[1];
+    $transporte=url_actual();
+    echo '<script language="javascript">alert("'.$transporte.'");</script>';
+  ?>
+      <div id="form-domicilios" >
+    
+        <form action="<?php get_the_permalink(); ?>" method="POST" >
+        <div class="form-group">
+        <label style="color:#390066">Nombres</label>
+        <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domivehiculo" name="nombres-domivehiculo" style="background-color:#DFD5ED;">
+      </div>
+     
+      <div class="form-group">
+        <label style="color:#390066">Teléfono / Celular</label>
+        <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domivehiculo" name="tel-domivehiculo" style="background-color:#DFD5ED;">
+      </div>
+      
+      <div class="form-group">
+        <br>
+        <label style="color:#390066">Correo electrónico</label>
+        <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domivehiculo" name="email-domivehiculo" style="background-color:#DFD5ED;">
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Dirección donde recogemos</label>
+        <input type="text" class="form-control" id="recogida-domivehiculo" name="recogida-domivehiculo" style="background-color:#DFD5ED;">
+      </div>
+      
+      <div class="form-group">
+        <label style="color:#390066">¿Qué deseas?</label>
+        <textarea class="form-control" id="deseo-domivehiculo" rows="3" name="deseo-domivehiculo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
+  " style="background-color:#DFD5ED;"></textarea>
+        </div>
+        
+      
+        <div class="form-group">
+          <label style="color:#390066">¿Nombres de quien recibe?</label>
+          <input type="text" class="form-control" id="recibe-domivehiculo" name="recibe-domivehiculo" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Dirección donde entregamos</label>
+          <input type="text" class="form-control" id="direntrega-domivehiculo" name="direntrega-domivehiculo" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Teléfono de quien recibe</label>
+          <input type="text" class="form-control" id="telrecibe-domivehiculo" name="telrecibe-domivehiculo" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Notas/Observaciones</label>
+          <textarea class="form-control" id="notas-domivehiculo" rows="3" name="notas-domivehiculo" placeholder="Información adicional o necesaria para el domicilio.
+  " style="background-color:#DFD5ED;"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+        </div>
+        
+      </form>
+    
+      </div>
+
+      <?php
+      // Devuelve el contenido del buffer de salida
+      return ob_get_clean();
+    }else {
+      
+      echo '<div class="alert alert-danger" role="alert">
+      Debes estar registrado por motivos de facturación electrónica
+    </div>';
+      echo do_shortcode( ' [woocommerce_my_account] ' );
+
+      return ob_get_clean();
+    }
+}
+
+function domicilio_Dommi_carguero(){
+  ob_start();
+  if(is_user_logged_in()){
+
+    $sesiones=obtener_datos_de_sesion();
+   
+   $nombre=$sesiones[0];
+  $cel=315;
+  $correo=$sesiones[1];
+    $transporte=url_actual();
+    echo '<script language="javascript">alert("'.$transporte.'");</script>';
+  ?>
+      <div id="form-domicilios" >
+    
+        <form action="<?php get_the_permalink(); ?>" method="POST" >
+        <div class="form-group">
+        <label style="color:#390066">Nombres</label>
+        <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domicarguero" name="nombres-domicarguero" style="background-color:#DFD5ED;">
+      </div>
+     
+      <div class="form-group">
+        <label style="color:#390066">Teléfono / Celular</label>
+        <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domicarguero" name="tel-domicarguero" style="background-color:#DFD5ED;">
+      </div>
+      
+      <div class="form-group">
+        <br>
+        <label style="color:#390066">Correo electrónico</label>
+        <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domicarguero" name="email-domicarguero" style="background-color:#DFD5ED;">
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Dirección donde recogemos</label>
+        <input type="text" class="form-control" id="recogida-domicarguero" name="recogida-domicarguero" style="background-color:#DFD5ED;">
+      </div>
+      
+      <div class="form-group">
+        <label style="color:#390066">¿Qué deseas?</label>
+        <textarea class="form-control" id="deseo-domicarguero" rows="3" name="deseo-domicarguero" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
+  " style="background-color:#DFD5ED;"></textarea>
+        </div>
+        
+      
+        <div class="form-group">
+          <label style="color:#390066">¿Nombres de quien recibe?</label>
+          <input type="text" class="form-control" id="recibe-domicarguero" name="recibe-domicarguero" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Dirección donde entregamos</label>
+          <input type="text" class="form-control" id="direntrega-domicarguero" name="direntrega-domicarguero" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Teléfono de quien recibe</label>
+          <input type="text" class="form-control" id="telrecibe-domicarguero" name="telrecibe-domicarguero" style="background-color:#DFD5ED;">
+        </div>
+        <br>
+        <div class="form-group">
+          <label style="color:#390066">Notas/Observaciones</label>
+          <textarea class="form-control" id="notas-domicarguero" rows="3" name="notas-domicarguero" placeholder="Información adicional o necesaria para el domicilio.
+  " style="background-color:#DFD5ED;"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+        </div>
+        
+      </form>
+    
+      </div>
+
+      <?php
+      // Devuelve el contenido del buffer de salida
+      return ob_get_clean();
+    }else {
+      
+      echo '<div class="alert alert-danger" role="alert">
+      Debes estar registrado por motivos de facturación electrónica
+    </div>';
+      echo do_shortcode( ' [woocommerce_my_account] ' );
+
+      return ob_get_clean();
+    }
+}
+
 
 function move_file($file, $to){
   $path_parts = pathinfo($file);
@@ -368,107 +630,107 @@ function registro_mensajero(){
      $nombre_zip = 'wp-content/zips/'.$save_name_zip;
      // $nombre_zip = 'killerh.zip';
       $mizip = new ZipArchive();
-$mizip->open($nombre_zip, ZipArchive::CREATE);
+  $mizip->open($nombre_zip, ZipArchive::CREATE);
 
-      foreach ($adarchivos as $nuevo){
+        foreach ($adarchivos as $nuevo){
 
-        $mizip->addFile($nuevo, str_replace($content_directory, '', $nuevo));
-    }
-  
-
-      } else {
-         echo "The file was not uploaded";
+          $mizip->addFile($nuevo, str_replace($content_directory, '', $nuevo));
       }
+    
+
+        } else {
+          echo "The file was not uploaded";
+        }
 
 
-      $tabla_aspirantes = $wpdb->prefix . 'dommis';
-      $name_user = sanitize_text_field($_POST['name_user']);
-      $Nombre = sanitize_text_field($_POST['Nombre']);
-      $Apellido = sanitize_text_field($_POST['Apellido']);
-      $Celular = sanitize_text_field($_POST['Celular']);
-      $correo = sanitize_text_field($_POST['correo']);
-      $Contraseña = sanitize_text_field($_POST['Contraseña']);
-      $Documentos = sanitize_text_field($_POST['Documentos']);
-      $created_at = date('Y-m-d H:i:s');
-      $wpdb->insert(
-        $tabla_aspirantes,array(
-          'name_user'=> $name_user,
-          'Nombre'=> $Nombre,
-          'Apellido'=>$Apellido,
-          'Celular'=>$Celular,
-          'correo'=>$correo,
-          'Contraseña'=>$Contraseña,
-          'Documentos'=>$save_name_zip,
-          'created_at'=>$created_at,
+        $tabla_aspirantes = $wpdb->prefix . 'dommis';
+        $name_user = sanitize_text_field($_POST['name_user']);
+        $Nombre = sanitize_text_field($_POST['Nombre']);
+        $Apellido = sanitize_text_field($_POST['Apellido']);
+        $Celular = sanitize_text_field($_POST['Celular']);
+        $correo = sanitize_text_field($_POST['correo']);
+        $Contraseña = sanitize_text_field($_POST['Contraseña']);
+        $Documentos = sanitize_text_field($_POST['Documentos']);
+        $created_at = date('Y-m-d H:i:s');
+        $wpdb->insert(
+          $tabla_aspirantes,array(
+            'name_user'=> $name_user,
+            'Nombre'=> $Nombre,
+            'Apellido'=>$Apellido,
+            'Celular'=>$Celular,
+            'correo'=>$correo,
+            'Contraseña'=>$Contraseña,
+            'Documentos'=>$save_name_zip,
+            'created_at'=>$created_at,
 
-        )
-        );
-        echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
-        por tu interés. En breve contactaré contigo.<p>";
-    }
-    
-  ob_start();
-    
-  ?>
-  <div id="form-domicilios" >
-  
-  <form action="<?php get_the_permalink(); ?>" method="POST" enctype="multipart/form-data">
-  <?php wp_nonce_field('graba_aspirante', 'aspirante_nonce'); ?>
-    <div class="form-group">
-      <label style="color:#390066">Nombre de Usuario</label>
-      <input type="text" class="form-control" name="name_user">
-    </div>
-    
-    <div class="form-group">
-      <label style="color:#390066">Nombres</label>
-      <input type="text" class="form-control" name="Nombre">
-    </div>
-    <br>
-    <div class="form-group">
+          )
+          );
+          echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
+          por tu interés. En breve contactaré contigo.<p>";
+      }
       
-      <label style="color:#390066">Apellidos</label>
-      <input type="text" class="form-control" name="Apellido">
-    </div>
-    <div class="form-group">
+    ob_start();
+      
+    ?>
+    <div id="form-domicilios" >
+    
+    <form action="<?php get_the_permalink(); ?>" method="POST" enctype="multipart/form-data">
+    <?php wp_nonce_field('graba_aspirante', 'aspirante_nonce'); ?>
+      <div class="form-group">
+        <label style="color:#390066">Nombre de Usuario</label>
+        <input type="text" class="form-control" name="name_user">
+      </div>
+      
+      <div class="form-group">
+        <label style="color:#390066">Nombres</label>
+        <input type="text" class="form-control" name="Nombre">
+      </div>
       <br>
-      <label style="color:#390066">Celular</label>
-      <input type="number" class="form-control" name="Celular">
+      <div class="form-group">
+        
+        <label style="color:#390066">Apellidos</label>
+        <input type="text" class="form-control" name="Apellido">
+      </div>
+      <div class="form-group">
+        <br>
+        <label style="color:#390066">Celular</label>
+        <input type="number" class="form-control" name="Celular">
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Correo</label>
+        <input type="email" class="form-control" name="correo">
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Contraseña</label>
+        <input type="password" class="form-control" name="Contraseña">
+      </div>
+      <h3>Documentos de vehículo</h3>
+      <div class="form-group">
+        <label style="color:#390066">Cédula de Ciudadanía</label><br>
+        <input name="upload-file" type="file" />
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Tarjeta de Propiedad</label><br>
+        <input name="upload-file1" type="file" />
+      </div>
+      <div class="form-group">
+        <label style="color:#390066">Soat/Tecnomecánica </label><br>
+        <input name="upload-file2" type="file" />
+      </div>
+    
+    
+    
+      <br>
+      <button type="submit" class="btn btn-primary">REGISTRARSE</button>
+    </form>
+    
+    </script>
     </div>
-    <div class="form-group">
-      <label style="color:#390066">Correo</label>
-      <input type="email" class="form-control" name="correo">
-    </div>
-    <div class="form-group">
-      <label style="color:#390066">Contraseña</label>
-      <input type="password" class="form-control" name="Contraseña">
-    </div>
-    <h3>Documentos de vehículo</h3>
-    <div class="form-group">
-      <label style="color:#390066">Cédula de Ciudadanía</label><br>
-      <input name="upload-file" type="file" />
-    </div>
-    <div class="form-group">
-      <label style="color:#390066">Tarjeta de Propiedad</label><br>
-      <input name="upload-file1" type="file" />
-    </div>
-    <div class="form-group">
-      <label style="color:#390066">Soat/Tecnomecánica </label><br>
-      <input name="upload-file2" type="file" />
-    </div>
-   
-  
-  
-    <br>
-    <button type="submit" class="btn btn-primary">REGISTRARSE</button>
-  </form>
-  
-  </script>
-  </div>
 
-  <?php
-  
-  // Devuelve el contenido del buffer de salida
-  return ob_get_clean();
+    <?php
+    
+    // Devuelve el contenido del buffer de salida
+    return ob_get_clean();
 
 
 }
@@ -495,31 +757,33 @@ function Aspirante_admin()
     global $wpdb;
     $tabla_aspirantes = $wpdb->prefix . 'dommis';
     $aspirantes = $wpdb->get_results("SELECT * FROM $tabla_aspirantes");
+   
     echo '<div class="wrap"><h1>Lista de aspirantes Dommi</h1>';
     echo '<table class="wp-list-table widefat fixed striped">
     <thead>
       <tr>
         <th scope="col">Nombre Usuario</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
+        <th scope="col">Nombres y Apellidos</th>
+       
         <th scope="col">Celular</th>
         <th scope="col">Correo</th>
         <th scope="col">Contraseña</th>
         <th scope="col">Documentos</th>
+        <th scope="col">Aprobar Aspirante</th>
       </tr>
     </thead>
     <tbody>';
        foreach ($aspirantes as $aspirante){
          echo '<tr>';
             echo '<td>'.esc_textarea($aspirante->name_user).'</td>';
-            echo '<td>'.$aspirante->Nombre.'</td>';
-            echo '<td>'.$aspirante->Apellido.'</td>';
+            echo '<td>'.$aspirante->Nombre." ".$aspirante->Apellido.'</td>';
+            
             echo '<td>'.$aspirante->Celular.'</td>';
             echo '<td>'.$aspirante->correo.'</td>';
             echo '<td>'.md5($aspirante->Contraseña).'</td>';
            // echo '<td>'.$aspirante->Documentos.'</td>';
            echo '<td><a href="../wp-content/zips/'.$aspirante->Documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
-           
+           echo '<td> <a id="boton-bonito" href="?page=allentries">Aprobar</a>'.'</td>';
          echo '</tr>';
        }
        echo   '</tbody></table>';
@@ -536,48 +800,57 @@ function mys_scripts(){
 }
 
 add_shortcode('archivos_dommi', 'cargar_archivos');
-function cargar_archivos(){
-  $fecha= date("Y-m-d-H-i-s");
-  echo gettype( $fecha);
-  if(isset($_FILES['upload-file'])) {
-		global $wp_filesystem;
-		WP_Filesystem();
-   
-		$name_file = $_FILES['upload-file']['name'];
-		$tmp_name = $_FILES['upload-file']['tmp_name'];
-		$allow_extensions = ['pdf', 'xlsx', 'csv'];
-    $nombres=$fecha."H".$name_file;
-		// File type validation
-		$path_parts = pathinfo($name_file);
-		$ext = $path_parts['extension'];
+  function cargar_archivos(){
+    $fecha= date("Y-m-d-H-i-s");
+    echo gettype( $fecha);
+    if(isset($_FILES['upload-file'])) {
+      global $wp_filesystem;
+      WP_Filesystem();
+    
+      $name_file = $_FILES['upload-file']['name'];
+      $tmp_name = $_FILES['upload-file']['tmp_name'];
+      $allow_extensions = ['pdf', 'xlsx', 'csv'];
+      $nombres=$fecha."H".$name_file;
+      // File type validation
+      $path_parts = pathinfo($name_file);
+      $ext = $path_parts['extension'];
 
-		if ( ! in_array($ext, $allow_extensions) ) {
-			echo "Error -El tipo de archivo permitod es PDF";
-			return;
-		}
+      if ( ! in_array($ext, $allow_extensions) ) {
+        echo "Error -El tipo de archivo permitod es PDF";
+        return;
+      }
 
-		$content_directory = $wp_filesystem->wp_content_dir() . 'uploads/archivos-subidos/';
-		$wp_filesystem->mkdir( $content_directory );
+      $content_directory = $wp_filesystem->wp_content_dir() . 'uploads/archivos-subidos/';
+      $wp_filesystem->mkdir( $content_directory );
 
-		if( move_uploaded_file( $tmp_name, $content_directory .$nombres ) ) {
-			echo "File was successfully uploaded";
-		} else {
-			echo "The file was not uploaded";
-		}
-	}
-  ob_start();
+      if( move_uploaded_file( $tmp_name, $content_directory .$nombres ) ) {
+        echo "File was successfully uploaded";
+      } else {
+        echo "The file was not uploaded";
+      }
+    }
+    ob_start();
 
-  ?>
-<div class="wrap">
-		<h1>Ejemplo de subida de archivo</h1>
-		<br>
-		<form enctype="multipart/form-data" method="post">
-			Selecciona algún archivo: <input name="upload-file" type="file" /> <hr>
-			<input type="submit" value="Enviar archivo" />
-		</form>
-	</div>
-<?php
-  
-  // Devuelve el contenido del buffer de salida
-  return ob_get_clean();
+    ?>
+  <div class="wrap">
+      <h1>Ejemplo de subida de archivo</h1>
+      <br>
+      <form enctype="multipart/form-data" method="post">
+        Selecciona algún archivo: <input name="upload-file" type="file" /> <hr>
+        <input type="submit" value="Enviar archivo" />
+      </form>
+    </div>
+  <?php
+    
+    // Devuelve el contenido del buffer de salida
+    return ob_get_clean();
+}
+
+
+function obtener_datos_de_sesion(){
+  //global $wpdb;
+  //$usuario = $wpdb->get_results("SELECT * FROM wp_users");
+    $hf_user= wp_get_current_user();
+    $hf_username = $hf_user->user_login;
+    return array($hf_user->display_name,$hf_user->user_email);
 }
