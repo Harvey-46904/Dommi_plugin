@@ -49,7 +49,7 @@ function tbl_domiciliarios()
 
 add_shortcode('domicilios_dommi_moto', 'domicilio_Dommi_moto');
 add_shortcode('domicilio_Dommi_piagio', 'domicilio_Dommi_piagio');
-add_shortcode('domicilio_Dommi_vehiculo', ' domicilio_Dommi_vehiculo');
+add_shortcode('domicilio_Dommi_vehiculos', 'domicilio_Dommi_vehiculos');
 add_shortcode('domicilio_Dommi_carguero', 'domicilio_Dommi_carguero');
 add_shortcode('mensajero_dommi', 'registro_mensajero');
 
@@ -237,49 +237,49 @@ function domicilio_Dommi_moto(){
     <form action="<?php get_the_permalink(); ?>" method="POST" >
       <div class="form-group">
         <label style="color:#390066">Nombres</label>
-        <input type="text" class="form-control" name="nombres" id="nombres" value="<?php echo $nombre; ?>">
+        <input type="text" class="form-control" style="background-color:#DFD5ED;" name="nombres" id="nombres" value="<?php echo $nombre; ?>">
       </div>
      
       <div class="form-group">
         <label style="color:#390066">Teléfono / Celular</label>
-        <input type="text" class="form-control" name="contacto" value="<?php echo $cel; ?>">
+        <input type="text" class="form-control" style="background-color:#DFD5ED;" name="contacto" value="<?php echo $cel; ?>">
       </div>
-      <br>
+      
       <div class="form-group">
         <br>
         <label style="color:#390066">Correo electrónico</label>
-        <input type="email" class="form-control" name="email" value="<?php echo $correo; ?>">
+        <input type="email" class="form-control" style="background-color:#DFD5ED;" name="email" value="<?php echo $correo; ?>">
       </div>
       <div class="form-group">
         <label style="color:#390066">Dirección donde recogemos</label>
-        <input type="text" class="form-control" name="recogida">
+        <input type="text" class="form-control" style="background-color:#DFD5ED;" name="recogida">
       </div>
       
       <div class="form-group">
         <label style="color:#390066">¿Qué deseas?</label>
-        <textarea class="form-control" id="deseo" rows="3" name="deseo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
+        <textarea class="form-control" id="deseo" style="background-color:#DFD5ED;" rows="3" name="deseo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
   "></textarea>
         </div>
         
       
         <div class="form-group">
           <label style="color:#390066">¿Nombres de quien recibe?</label>
-          <input type="text" class="form-control" name="nombre_recibe">
+          <input type="text" class="form-control" style="background-color:#DFD5ED;" name="nombre_recibe">
         </div>
         <br>
         <div class="form-group">
           <label style="color:#390066">Dirección donde entregamos</label>
-          <input type="text" class="form-control" name="entrega">
+          <input type="text" class="form-control" style="background-color:#DFD5ED;" name="entrega">
         </div>
         <br>
         <div class="form-group">
           <label style="color:#390066">Teléfonoo de quien recibe</label>
-          <input type="text" class="form-control" name="telefono_recibe">
+          <input type="text" class="form-control" style="background-color:#DFD5ED;" name="telefono_recibe">
         </div>
         <br>
         <div class="form-group">
           <label style="color:#390066">Notas/Observaciones</label>
-          <textarea class="form-control" id="deseo" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
+          <textarea class="form-control" id="deseo"  style="background-color:#DFD5ED;" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
   "></textarea>
         </div>
         <br>
@@ -387,7 +387,7 @@ function domicilio_Dommi_piagio(){
     }
 }
 
-function domicilio_Dommi_vehiculo(){
+function domicilio_Dommi_vehiculos(){
   ob_start();
   if(is_user_logged_in()){
 
