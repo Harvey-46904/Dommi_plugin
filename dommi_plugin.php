@@ -905,8 +905,7 @@ Cliente Creado Correctamente
  
 
 
-
-
+else {
   ?>
 <form action="<?php get_the_permalink(); ?>" method="POST" >
 <div class="form-group">
@@ -933,6 +932,6 @@ Cliente Creado Correctamente
   <button type="submit" class="btn btn-primary">REGISTRAR</button>
 </form>
   <?php
-
+}
   return ob_get_clean();
 }
