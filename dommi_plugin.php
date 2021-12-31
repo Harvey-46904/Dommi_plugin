@@ -860,7 +860,7 @@ function obtener_datos_de_sesion(){
 
 function agregar_usuario_cliente(){
   ob_start();
-
+  echo did_action( 'agregar_usuario_cliente' );
   if(
     $_POST['nombre_usuario'] != ''
     AND $_POST['nombres_completos'] != ''
