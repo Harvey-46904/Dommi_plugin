@@ -11,6 +11,8 @@ License: GPLv2
 require __DIR__ . '/vendor/autoload.php';
 require_once(ABSPATH.'wp-includes/pluggable.php');
 require_once(ABSPATH . 'wp-admin/includes/file.php');
+require_once(ABSPATH . 'wp-content/plugins/local-delivery-drivers-for-woocommerce-premium/includes/class-lddfw-driver.php');
+
 use Automattic\WooCommerce\Client;
 // Cuando el plugin se active se crea la tabla para recoger los datos si no existe
 register_activation_hook(__FILE__, 'tbl_domiciliarios');
@@ -79,9 +81,13 @@ function comprobar_sesion(){
 
 
 
-function agregar_domicilio( $nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega
+function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega
 ) 
 {
+  $id_driver=0;
+  if($tipo=="Vehiculo"){
+      $id_driver="59";
+  }
         $data = [
             'payment_method' => 'bacs',
             'payment_method_title' => 'nequi',
@@ -125,8 +131,10 @@ function agregar_domicilio( $nombres,$apellidos,$contacto,$email,$recogida,$dese
       ]
   );
       
-      $woocommerce->post('orders', $data);
-      
+   $pedido=$woocommerce->post('orders', $data);
+  $id_pedido=$pedido->id;
+echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
+assign_delivery_driver( $id_pedido, $id_driver, 'store' );
 }
 
 
@@ -311,6 +319,8 @@ function domicilio_Dommi_vehiculos(){
      AND $_POST['telrecibe-domivehiculo'] != ''
      AND  $_POST['notas-domivehiculo'] != ''
       ){
+
+        $tipo="Vehiculo";
           $nombres_domivehiculo = sanitize_text_field($_POST['nombres-domivehiculo']);
           $tel_domivehiculo= sanitize_text_field($_POST['tel-domivehiculo']);
           $email_domivehiculo= sanitize_text_field($_POST['email-domivehiculo']);
@@ -330,7 +340,8 @@ function domicilio_Dommi_vehiculos(){
           $nombre_recibe= $recibe_domivehiculo;
           $apellido_recibe="";
           $entrega=$direntrega_domivehiculo;
-          agregar_domicilio();
+          
+          agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
         echo "pedido realizado";
       }
     $sesiones=obtener_datos_de_sesion();
@@ -880,11 +891,18 @@ else {
 
 
 function wpb_demo_shortcode() { 
- 
-echo did_action( 'wpb_demo_shortcode' );
+  $woocommerce = new Client(
+    'https://dommi.net/', 
+    'ck_ae1b5bce8346b9fe963511a6cfca17512a98f364', 
+    'cs_5f9d813b3fa984ed646fcca5451587863cb958c4',
+    [
+        'version' => 'wc/v3',
+    ]
+);
+  print_r($woocommerce->get('orders')); 
    
   // Output needs to be return
-  
+  return "hola";
   } 
   // register shortcode
   add_shortcode('greeting', 'wpb_demo_shortcode'); 
