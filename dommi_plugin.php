@@ -897,9 +897,9 @@ $user = new WP_User($id_ultimo);
 $user->set_role('customer');
 
 //$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
-echo '<div class="alert alert-success" role="alert">
-Cliente Creado Correctamente
-</div>';
+echo "<script>location.replace('https://dommi.net/login/');</script>";
+
+
   }
  
 
