@@ -669,6 +669,8 @@ function registro_mensajero(){
           );
           echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
           por tu interés. En breve contactaré contigo.<p>";
+
+          echo "<script>location.replace('https://dommi.net/confirmacion-aspirante/');</script>";
     }else{
 
     
