@@ -619,7 +619,6 @@ function registro_mensajero(){
         move_uploaded_file( $tmp_name1, $content_directory .$nombres1 ) AND
         move_uploaded_file( $tmp_name2, $content_directory .$nombres2 ) 
       ) {
-        echo "Documento se a cargado";
         $adarchivos = array();
         $adarchivos = array(
           $content_directory .$nombres,
@@ -637,7 +636,7 @@ function registro_mensajero(){
 
           $mizip->addFile($nuevo, str_replace($content_directory, '', $nuevo));
       }
-    
+      echo "veces de carga".did_action( 'registro_mensajero' );
 
         } else {
           echo "The file was not uploaded";
@@ -939,21 +938,7 @@ else {
 
 function wpb_demo_shortcode() { 
  
-  // Things that you want to do. 
-  if(  $_POST['fname'] != ''){
-    echo "entro";
-  }else{
-    echo "no enstro";
-  }
-
-  ?>
-  <form action="/action_page.php" method="get">
-  <label for="fname">First name:</label>
-  <input type="text" id="fname" name="fname"><br><br>
- 
-  <input type="submit" value="Submit">
-</form>
-<?php
+echo did_action( 'wpb_demo_shortcode' );
    
   // Output needs to be return
   
