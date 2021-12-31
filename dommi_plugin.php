@@ -52,6 +52,7 @@ add_shortcode('domicilio_Dommi_piagio', 'domicilio_Dommi_piagio');
 add_shortcode('domicilio_Dommi_vehiculos', 'domicilio_Dommi_vehiculos');
 add_shortcode('domicilio_Dommi_carguero', 'domicilio_Dommi_carguero');
 add_shortcode('mensajero_dommi', 'registro_mensajero');
+add_shortcode('mensajero_dommi_cliente', 'agregar_usuario_cliente');
 
 function your_function() {
     ?>
@@ -226,7 +227,7 @@ function domicilio_Dommi_moto(){
    $sesiones=obtener_datos_de_sesion();
    
    $nombre=$sesiones[0];
-  $cel=315;
+  $cel=$sesiones[2];;
   $correo=$sesiones[1];
 
     $transporte=url_actual();
@@ -309,7 +310,7 @@ function domicilio_Dommi_piagio(){
     $sesiones=obtener_datos_de_sesion();
    
    $nombre=$sesiones[0];
-  $cel=315;
+  $cel=$sesiones[2];;
   $correo=$sesiones[1];
     $transporte=url_actual();
     echo '<script language="javascript">alert("'.$transporte.'");</script>';
@@ -392,9 +393,9 @@ function domicilio_Dommi_vehiculos(){
   if(is_user_logged_in()){
 
     $sesiones=obtener_datos_de_sesion();
-   
+  
    $nombre=$sesiones[0];
-  $cel=315;
+  $cel=$sesiones[2];;
   $correo=$sesiones[1];
     $transporte=url_actual();
     echo '<script language="javascript">alert("'.$transporte.'");</script>';
@@ -479,7 +480,7 @@ function domicilio_Dommi_carguero(){
     $sesiones=obtener_datos_de_sesion();
    
    $nombre=$sesiones[0];
-  $cel=315;
+  $cel=$sesiones[2];
   $correo=$sesiones[1];
     $transporte=url_actual();
     echo '<script language="javascript">alert("'.$transporte.'");</script>';
@@ -852,5 +853,84 @@ function obtener_datos_de_sesion(){
   //$usuario = $wpdb->get_results("SELECT * FROM wp_users");
     $hf_user= wp_get_current_user();
     $hf_username = $hf_user->user_login;
-    return array($hf_user->display_name,$hf_user->user_email);
+    
+    return array($hf_user->display_name,$hf_user->user_email,$hf_user->user_phone);
+}
+
+
+
+function agregar_usuario_cliente(){
+  ob_start();
+
+  if(
+    $_POST['nombre_usuario'] != ''
+    AND $_POST['nombres_completos'] != ''
+    AND $_POST['telefono'] != ''
+    AND $_POST['correo'] != ''
+    AND $_POST['contraseña'] != ''
+    
+  ){
+    
+    $nombre_usuario= sanitize_text_field($_POST['nombre_usuario']);
+    $nombres_completos= sanitize_text_field($_POST['nombres_completos']);
+    $telefono= sanitize_text_field($_POST['telefono']);
+    $telefono=intval($telefono);
+    $correo = sanitize_text_field($_POST['correo']);
+    $contraseña= sanitize_text_field($_POST['contraseña']);
+    global $wpdb;
+    //$usuario = $wpdb->query("INSERT INTO `woocomerce`.`wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`,`user_phone`) VALUES (NULL, '".$nombre_usuario."', MD5('".$contraseña."'), '".$nombres_completos."', '".$correo."', '', '2011-06-07 00:00:00', '', '0', '".$nombres_completos."','".$telefono."');");
+    //$usuario = $wpdb->get_results(" SELECT LAST_INSERT_ID() as ids;");
+    
+   // $id_registrado=$usuario[0]->ids;
+   $user_login = wp_slash( $nombre_usuario );
+   $user_email = wp_slash( $correo );
+   $user_pass  = $contraseña;
+
+   $userdata = compact( 'user_login', 'user_email', 'user_pass' );
+    $id_ultimo=wp_insert_user( $userdata );
+    
+//una vez se alla registrado actualizo tabla usuarios
+$usuario = $wpdb->query("UPDATE `wp_users` SET `user_nicename` = '".$nombres_completos."', `display_name` = '".$nombres_completos."', `user_phone` = '".$telefono."' WHERE `wp_users`.`ID` = ".$id_ultimo.";");
+//$id_registrado = $wpdb->get_results("SELECT `umeta_id` FROM `wp_usermeta` WHERE `user_id`=".$id_ultimo." AND `meta_key`='wp_capabilities;'");
+  
+$user = new WP_User($id_ultimo);
+
+$user->set_role('customer');
+
+//$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
+
+  }
+ 
+
+
+
+
+  ?>
+<form action="<?php get_the_permalink(); ?>" method="POST" >
+<div class="form-group">
+    <label for="exampleInputPassword1">Nombre Usuario</label>
+    <input type="text" name="nombre_usuario" class="form-control" id="exampleInputPassword1" placeholder="">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Nombres Completos</label>
+    <input type="text" name="nombres_completos" class="form-control" id="exampleInputPassword2" placeholder="">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Telefono</label>
+    <input type="number" name="telefono"class="form-control" id="exampleInputPassword3" placeholder="">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Correo Electronico</label>
+    <input type="email" name="correo" class="form-control" id="exampleInputEmail4" aria-describedby="emailHelp" placeholder="">
+    
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Contraseña</label>
+    <input type="password" name="contraseña" class="form-control" id="exampleInputPassword5" placeholder="">
+  </div>
+  <button type="submit" class="btn btn-primary">REGISTRAR</button>
+</form>
+  <?php
+
+  return ob_get_clean();
 }
