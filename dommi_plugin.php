@@ -932,7 +932,7 @@ else {
 </form>
   <?php
 }
-  return ob_get_clean();
+ // return ob_get_clean();
 }
 
 
