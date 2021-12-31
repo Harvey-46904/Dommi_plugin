@@ -940,10 +940,23 @@ else {
 function wpb_demo_shortcode() { 
  
   // Things that you want to do. 
-  $message = 'Hello world!'; 
+  if(  $_POST['fname'] != ''){
+    echo "entro";
+  }else{
+    echo "no enstro";
+  }
+
+  ?>
+  <form action="/action_page.php" method="get">
+  <label for="fname">First name:</label>
+  <input type="text" id="fname" name="fname"><br><br>
+ 
+  <input type="submit" value="Submit">
+</form>
+<?php
    
   // Output needs to be return
-  return $message;
+  
   } 
   // register shortcode
   add_shortcode('greeting', 'wpb_demo_shortcode'); 
