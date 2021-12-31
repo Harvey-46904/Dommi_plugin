@@ -569,6 +569,8 @@ function move_file($file, $to){
 
 function registro_mensajero(){
   $fecha= date("Y-m-d-H-i-s");
+  ob_start();
+      
   global $wpdb;
  if ($_POST['name_user'] != ''
         AND $_POST['Nombre'] != ''
@@ -630,7 +632,7 @@ function registro_mensajero(){
      $nombre_zip = 'wp-content/zips/'.$save_name_zip;
      // $nombre_zip = 'killerh.zip';
       $mizip = new ZipArchive();
-  $mizip->open($nombre_zip, ZipArchive::CREATE);
+       $mizip->open($nombre_zip, ZipArchive::CREATE);
 
         foreach ($adarchivos as $nuevo){
 
@@ -667,10 +669,9 @@ function registro_mensajero(){
           );
           echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
           por tu interés. En breve contactaré contigo.<p>";
-      }
-      
-    ob_start();
-      
+    }else{
+
+    
     ?>
     <div id="form-domicilios" >
     
@@ -727,12 +728,11 @@ function registro_mensajero(){
     </script>
     </div>
 
+  
     <?php
-    
-    // Devuelve el contenido del buffer de salida
     return ob_get_clean();
-
-
+  }
+    // Devuelve el contenido del buffer de salida
 }
 
 
@@ -928,6 +928,7 @@ else {
     <label for="exampleInputPassword1">Contraseña</label>
     <input type="password" name="contraseña" class="form-control" id="exampleInputPassword5" placeholder="">
   </div>
+  <br>
   <button type="submit" class="btn btn-primary">REGISTRAR</button>
 </form>
   <?php
