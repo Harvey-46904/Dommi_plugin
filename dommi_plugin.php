@@ -931,8 +931,9 @@ else {
   <button type="submit" class="btn btn-primary">REGISTRAR</button>
 </form>
   <?php
+  return ob_get_clean();
 }
- // return ob_get_clean();
+ // 
 }
 
 
