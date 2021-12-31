@@ -79,32 +79,9 @@ function comprobar_sesion(){
 
 
 
-function formulario_domicilio() 
+function agregar_domicilio( $nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega
+) 
 {
-
-    // Esta función de PHP activa el almacenamiento en búfer de salida (output buffer)
-    // Cuando termine el formulario lo imprime con la función ob_get_clean
-    if ($_POST['nombres'] != ''
-        AND $_POST['apellidos'] != ''
-        AND $_POST['contacto'] != ''
-        AND $_POST['email'] != ''  
-        AND $_POST['recogida'] != ''
-        AND $_POST['deseo'] != ''
-        AND $_POST['nombre_recibe'] != ''   
-        AND $_POST['apellido_recibe'] != ''  
-        AND $_POST['entrega'] != ''   
-    ) {
-        $nombres= sanitize_text_field($_POST['nombres']);
-        $apellidos= sanitize_text_field($_POST['apellidos']);
-        $contacto= sanitize_text_field($_POST['contacto']);
-        $email= sanitize_text_field($_POST['email']);
-        $recogida= sanitize_text_field($_POST['recogida']);
-        $deseo= sanitize_text_field($_POST['deseo']);
-        $nombre_recibe= sanitize_text_field($_POST['nombre_recibe']);
-        $apellido_recibe= sanitize_text_field($_POST['apellido_recibe']);
-        $entrega= sanitize_text_field($_POST['entrega']);
-
-
         $data = [
             'payment_method' => 'bacs',
             'payment_method_title' => 'nequi',
@@ -148,76 +125,8 @@ function formulario_domicilio()
       ]
   );
       
-      
-        
       $woocommerce->post('orders', $data);
-          echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
-              por tu interés. En breve contactaré contigo.<p>";
-      }
-
-  ////formulario
-      ob_start();
-    
-      ?>
-      <div id="form-domicilios" >
       
-      <form action="<?php get_the_permalink(); ?>" method="POST" >
-        <div class="form-group">
-          <label style="color:#390066">Nombres</label>
-          <input type="text" class="form-control" name="nombres">
-        </div>
-        <div class="form-group">
-          <label style="color:#390066">Apellidos</label>
-          <input type="text" class="form-control" name="apellidos">
-        </div>
-        <div class="form-group">
-          <label style="color:#390066">Teléfono / Celular</label>
-          <input type="text" class="form-control" name="contacto">
-        </div>
-        <br>
-        <div class="form-group">
-          <br>
-          <label style="color:#390066">Correo electrónico</label>
-          <input type="email" class="form-control" name="email">
-        </div>
-        <div class="form-group">
-          <label style="color:#390066">Dirección donde recogemos</label>
-          <input type="text" class="form-control" name="recogida">
-        </div>
-        
-        <div class="form-group">
-          <label style="color:#390066">¿Qué deseas?</label>
-          <textarea class="form-control" id="deseo" rows="3" name="deseo"></textarea>
-        </div>
-        
-      
-        <div class="form-group">
-          <label style="color:#390066">¿Nombre de quien recibe?</label>
-          <input type="text" class="form-control" name="nombre_recibe">
-        </div>
-        <div class="form-group">
-          <label style="color:#390066">Apellido de quien recibe?</label>
-          <input type="text" class="form-control" name="apellido_recibe">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Dirección donde entregamos</label>
-          <input type="text" class="form-control" name="entrega">
-        </div>
-        <br>
-      
-      
-        <br>
-        <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
-      </form>
-      
-      </script>
-      </div>
-
-      <?php
-      
-      // Devuelve el contenido del buffer de salida
-      return ob_get_clean();
 }
 
 
@@ -391,7 +300,39 @@ function domicilio_Dommi_piagio(){
 function domicilio_Dommi_vehiculos(){
   ob_start();
   if(is_user_logged_in()){
-
+    if(
+      $_POST['nombres-domivehiculo'] != ''
+     AND $_POST['tel-domivehiculo'] != ''
+     AND  $_POST['email-domivehiculo'] != ''
+     AND  $_POST['recogida-domivehiculo'] != ''
+     AND  $_POST['deseo-domivehiculo'] != ''
+     AND $_POST['recibe-domivehiculo'] != ''
+     AND $_POST['direntrega-domivehiculo'] != ''
+     AND $_POST['telrecibe-domivehiculo'] != ''
+     AND  $_POST['notas-domivehiculo'] != ''
+      ){
+          $nombres_domivehiculo = sanitize_text_field($_POST['nombres-domivehiculo']);
+          $tel_domivehiculo= sanitize_text_field($_POST['tel-domivehiculo']);
+          $email_domivehiculo= sanitize_text_field($_POST['email-domivehiculo']);
+          $recogida_domivehiculo= sanitize_text_field($_POST['recogida-domivehiculo']);
+          $deseo_domivehiculo= sanitize_text_field($_POST['deseo-domivehiculo']);
+          $recibe_domivehiculo= sanitize_text_field($_POST['recibe-domivehiculo']);
+          $direntrega_domivehiculo= sanitize_text_field($_POST['direntrega-domivehiculo']);
+          $telrecibe_domivehiculo= sanitize_text_field($_POST['telrecibe-domivehiculo']);
+          $notas_domivehiculo= sanitize_text_field($_POST['notas-domivehiculo']);
+          
+          $nombres=$nombres_domivehiculo;
+          $apellidos="";
+          $contacto=$tel_domivehiculo;
+          $email=$email_domivehiculo;
+          $recogida=$recogida_domivehiculo;
+          $deseo=$deseo_domivehiculo;
+          $nombre_recibe= $recibe_domivehiculo;
+          $apellido_recibe="";
+          $entrega=$direntrega_domivehiculo;
+          agregar_domicilio();
+        echo "pedido realizado";
+      }
     $sesiones=obtener_datos_de_sesion();
   
    $nombre=$sesiones[0];
@@ -638,8 +579,7 @@ function registro_mensajero(){
 
           $mizip->addFile($nuevo, str_replace($content_directory, '', $nuevo));
       }
-      echo "veces de carga".did_action( 'registro_mensajero' );
-
+     
         } else {
           echo "The file was not uploaded";
         }
@@ -667,8 +607,7 @@ function registro_mensajero(){
 
           )
           );
-          echo "<p class='exito'><b>Tus datos han sido registrados</b>. Gracias 
-          por tu interés. En breve contactaré contigo.<p>";
+        
 
           echo "<script>location.replace('https://dommi.net/confirmacion-aspirante/');</script>";
     }else{
