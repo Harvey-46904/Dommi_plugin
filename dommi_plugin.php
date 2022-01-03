@@ -249,6 +249,21 @@ function domicilio_Dommi_piagio(){
   ob_start();
   if(is_user_logged_in()){
 
+    if($_POST['nombres-domipiaggio'] != '')echo "este 1 ";
+    if( $_POST['tel-domipiaggio'] != '')echo "este 2 ";
+    if( $_POST['email-domipiaggio'] != '')echo "este3 ";
+    if( $_POST['recogida-domicarguero'] != '')echo "este4";
+    if( $_POST['deseo-domipiaggio'] != '')echo "este5";
+    if(  $_POST['recibe-domipiaggio'] != '')echo "este6";
+    if( $_POST['direntrega-domipiaggio'] != '')echo "este7";
+    if( $_POST['telrecibe-domipiaggio'] != '')echo "este8";
+    if( $_POST['notas-domipiaggio'] != '')echo "este9";
+
+
+
+
+
+
     if(
       $_POST['nombres-domipiaggio'] != ''
      AND $_POST['tel-domipiaggio'] != ''
