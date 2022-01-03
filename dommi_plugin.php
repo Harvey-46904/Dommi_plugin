@@ -137,6 +137,8 @@ $order = new WC_Order( $id_pedido );
 $order->update_status( 'processing' );
  
 assign_delivery_driver( $id_pedido, $id_driver, 'store' );
+
+echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
  // assign_delivery_driver( $id_pedido, $id_driver, 'store' );
  if (class_exists('LDDFW_Driver')) {
   //assign_delivery_driver( $id_pedido, $id_driver, 'store' );
@@ -315,43 +317,44 @@ function domicilio_Dommi_piagio(){
 function domicilio_Dommi_vehiculos(){
   ob_start();
   if(is_user_logged_in()){
-    if(
-      $_POST['nombres-domivehiculo'] != ''
-     AND $_POST['tel-domivehiculo'] != ''
-     AND  $_POST['email-domivehiculo'] != ''
-     AND  $_POST['recogida-domivehiculo'] != ''
-     AND  $_POST['deseo-domivehiculo'] != ''
-     AND $_POST['recibe-domivehiculo'] != ''
-     AND $_POST['direntrega-domivehiculo'] != ''
-     AND $_POST['telrecibe-domivehiculo'] != ''
-     AND  $_POST['notas-domivehiculo'] != ''
-      ){
+          if(
+                $_POST['nombres-domivehiculo'] != ''
+              AND $_POST['tel-domivehiculo'] != ''
+              AND  $_POST['email-domivehiculo'] != ''
+              AND  $_POST['recogida-domivehiculo'] != ''
+              AND  $_POST['deseo-domivehiculo'] != ''
+              AND $_POST['recibe-domivehiculo'] != ''
+              AND $_POST['direntrega-domivehiculo'] != ''
+              AND $_POST['telrecibe-domivehiculo'] != ''
+              AND  $_POST['notas-domivehiculo'] != ''
+                ){
 
-        $tipo="Vehiculo";
-          $nombres_domivehiculo = sanitize_text_field($_POST['nombres-domivehiculo']);
-          $tel_domivehiculo= sanitize_text_field($_POST['tel-domivehiculo']);
-          $email_domivehiculo= sanitize_text_field($_POST['email-domivehiculo']);
-          $recogida_domivehiculo= sanitize_text_field($_POST['recogida-domivehiculo']);
-          $deseo_domivehiculo= sanitize_text_field($_POST['deseo-domivehiculo']);
-          $recibe_domivehiculo= sanitize_text_field($_POST['recibe-domivehiculo']);
-          $direntrega_domivehiculo= sanitize_text_field($_POST['direntrega-domivehiculo']);
-          $telrecibe_domivehiculo= sanitize_text_field($_POST['telrecibe-domivehiculo']);
-          $notas_domivehiculo= sanitize_text_field($_POST['notas-domivehiculo']);
-          
-          $nombres=$nombres_domivehiculo;
-          $apellidos="";
-          $contacto=$tel_domivehiculo;
-          $email=$email_domivehiculo;
-          $recogida=$recogida_domivehiculo;
-          $deseo=$deseo_domivehiculo;
-          $nombre_recibe= $recibe_domivehiculo;
-          $apellido_recibe="";
-          $entrega=$direntrega_domivehiculo;
-          
-          agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
-          echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
-        return ob_get_clean();
-      }else{
+              $tipo="Vehiculo";
+                $nombres_domivehiculo = sanitize_text_field($_POST['nombres-domivehiculo']);
+                $tel_domivehiculo= sanitize_text_field($_POST['tel-domivehiculo']);
+                $email_domivehiculo= sanitize_text_field($_POST['email-domivehiculo']);
+                $recogida_domivehiculo= sanitize_text_field($_POST['recogida-domivehiculo']);
+                $deseo_domivehiculo= sanitize_text_field($_POST['deseo-domivehiculo']);
+                $recibe_domivehiculo= sanitize_text_field($_POST['recibe-domivehiculo']);
+                $direntrega_domivehiculo= sanitize_text_field($_POST['direntrega-domivehiculo']);
+                $telrecibe_domivehiculo= sanitize_text_field($_POST['telrecibe-domivehiculo']);
+                $notas_domivehiculo= sanitize_text_field($_POST['notas-domivehiculo']);
+                
+                $nombres=$nombres_domivehiculo;
+                $apellidos="";
+                $contacto=$tel_domivehiculo;
+                $email=$email_domivehiculo;
+                $recogida=$recogida_domivehiculo;
+                $deseo=$deseo_domivehiculo;
+                $nombre_recibe= $recibe_domivehiculo;
+                $apellido_recibe="";
+                $entrega=$direntrega_domivehiculo;
+                
+                agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
+                
+              return ob_get_clean();
+            }
+            else{
 
       
               $sesiones=obtener_datos_de_sesion();
@@ -365,59 +368,58 @@ function domicilio_Dommi_vehiculos(){
                     <div id="form-domicilios" >
                   
                       <form action="<?php get_the_permalink(); ?>" method="POST" >
-                      <div class="form-group">
-                      <label style="color:#390066">Nombres</label>
-                      <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domivehiculo" name="nombres-domivehiculo" style="background-color:#DFD5ED;">
-                    </div>
-                  
-                    <div class="form-group">
-                      <label style="color:#390066">Teléfono / Celular</label>
-                      <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domivehiculo" name="tel-domivehiculo" style="background-color:#DFD5ED;">
-                    </div>
-                    
-                    <div class="form-group">
-                      <br>
-                      <label style="color:#390066">Correo electrónico</label>
-                      <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domivehiculo" name="email-domivehiculo" style="background-color:#DFD5ED;">
-                    </div>
-                    <div class="form-group">
-                      <label style="color:#390066">Dirección donde recogemos</label>
-                      <input type="text" class="form-control" id="recogida-domivehiculo" name="recogida-domivehiculo" style="background-color:#DFD5ED;">
-                    </div>
-                    
-                    <div class="form-group">
-                      <label style="color:#390066">¿Qué deseas?</label>
-                      <textarea class="form-control" id="deseo-domivehiculo" rows="3" name="deseo-domivehiculo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
-                      " style="background-color:#DFD5ED;"></textarea>
-                      </div>
-                      
-                    
-                      <div class="form-group">
-                        <label style="color:#390066">¿Nombres de quien recibe?</label>
-                        <input type="text" class="form-control" id="recibe-domivehiculo" name="recibe-domivehiculo" style="background-color:#DFD5ED;">
-                      </div>
-                      <br>
-                      <div class="form-group">
-                        <label style="color:#390066">Dirección donde entregamos</label>
-                        <input type="text" class="form-control" id="direntrega-domivehiculo" name="direntrega-domivehiculo" style="background-color:#DFD5ED;">
-                      </div>
-                      <br>
-                      <div class="form-group">
-                        <label style="color:#390066">Teléfono de quien recibe</label>
-                        <input type="text" class="form-control" id="telrecibe-domivehiculo" name="telrecibe-domivehiculo" style="background-color:#DFD5ED;">
-                      </div>
-                      <br>
-                      <div class="form-group">
-                        <label style="color:#390066">Notas/Observaciones</label>
-                        <textarea class="form-control" id="notas-domivehiculo" rows="3" name="notas-domivehiculo" placeholder="Información adicional o necesaria para el domicilio.
-                    ground-color:#DFD5ED;"></textarea>
-                      </div>
-                      <br>
-                      <div>
-                          <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
-                      </div>
-                      
-                    </form>
+                              <div class="form-group">
+                              <label style="color:#390066">Nombres</label>
+                              <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domivehiculo" name="nombres-domivehiculo" style="background-color:#DFD5ED;">
+                            </div>
+                          
+                            <div class="form-group">
+                              <label style="color:#390066">Teléfono / Celular</label>
+                              <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domivehiculo" name="tel-domivehiculo" style="background-color:#DFD5ED;">
+                            </div>
+                            
+                            <div class="form-group">
+                              <br>
+                              <label style="color:#390066">Correo electrónico</label>
+                              <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domivehiculo" name="email-domivehiculo" style="background-color:#DFD5ED;">
+                            </div>
+                            <div class="form-group">
+                              <label style="color:#390066">Dirección donde recogemos</label>
+                              <input type="text" class="form-control" id="recogida-domivehiculo" name="recogida-domivehiculo" style="background-color:#DFD5ED;">
+                            </div>
+                            
+                            <div class="form-group">
+                              <label style="color:#390066">¿Qué deseas?</label>
+                              <textarea class="form-control" id="deseo-domivehiculo" rows="3" name="deseo-domivehiculo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
+                              " style="background-color:#DFD5ED;"></textarea>
+                              </div>
+                              
+                        
+                          <div class="form-group">
+                            <label style="color:#390066">¿Nombres de quien recibe?</label>
+                            <input type="text" class="form-control" id="recibe-domivehiculo" name="recibe-domivehiculo" style="background-color:#DFD5ED;">
+                          </div>
+                          <br>
+                          <div class="form-group">
+                            <label style="color:#390066">Dirección donde entregamos</label>
+                            <input type="text" class="form-control" id="direntrega-domivehiculo" name="direntrega-domivehiculo" style="background-color:#DFD5ED;">
+                          </div>
+                          <br>
+                          <div class="form-group">
+                            <label style="color:#390066">Teléfono de quien recibe</label>
+                            <input type="text" class="form-control" id="telrecibe-domivehiculo" name="telrecibe-domivehiculo" style="background-color:#DFD5ED;">
+                          </div>
+                          <br>
+                          <div class="form-group">
+                            <label style="color:#390066">Notas/Observaciones</label>
+                            <textarea class="form-control" id="notas-domivehiculo" rows="3" name="notas-domivehiculo" placeholder="Información adicional o necesaria para el domicilio."
+                            style="background-color:#DFD5ED;"></textarea>
+                          </div>
+                          <br>
+                          <div>
+                              <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+                          </div> 
+                      </form>
                   
                     </div>
 
