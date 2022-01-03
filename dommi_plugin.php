@@ -354,9 +354,9 @@ function domicilio_Dommi_vehiculos(){
                 
                 agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
                $comprobador=2;
-               echo "<script>location.replace('https://dommi.net/login/');</script>";
+               echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
                wp_die();
-               echo "<script>location.replace('https://dommi.net/logins/');</script>";
+              
               return ob_get_clean();
             }
             else{
