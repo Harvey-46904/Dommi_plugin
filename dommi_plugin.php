@@ -74,7 +74,7 @@ function comprobar_sesion(){
     //print_r($hf_user);
     return true;
   }else{
-    echo do_shortcode( ' [mensajero_dommi_cliente] ' );
+    echo do_shortcode( ' [woocommerce_my_account] ' );
   }
 }
 
@@ -136,7 +136,7 @@ echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
 $order = new WC_Order( $id_pedido );
 $order->update_status( 'processing' );
  
-
+assign_delivery_driver( $id_pedido, $id_driver, 'store' );
  // assign_delivery_driver( $id_pedido, $id_driver, 'store' );
  if (class_exists('LDDFW_Driver')) {
   //assign_delivery_driver( $id_pedido, $id_driver, 'store' );
@@ -222,7 +222,7 @@ function domicilio_Dommi_moto(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
+      echo do_shortcode( ' [woocommerce_my_account] ' );
 
       return ob_get_clean();
     }
@@ -306,7 +306,7 @@ function domicilio_Dommi_piagio(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
+      echo do_shortcode( ' [woocommerce_my_account] ' );
 
       return ob_get_clean();
     }
@@ -426,7 +426,7 @@ function domicilio_Dommi_vehiculos(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
+      echo do_shortcode( ' [woocommerce_my_account] ' );
 
       return ob_get_clean();
     }
@@ -511,7 +511,7 @@ function domicilio_Dommi_carguero(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
+      echo do_shortcode( ' [woocommerce_my_account] ' );
 
       return ob_get_clean();
     }
@@ -898,6 +898,7 @@ else {
 
 
 function wpb_demo_shortcode() { 
+  /*
   $woocommerce = new Client(
     'https://dommi.net/', 
     'ck_ae1b5bce8346b9fe963511a6cfca17512a98f364', 
@@ -907,9 +908,50 @@ function wpb_demo_shortcode() {
     ]
 );
   print_r($woocommerce->get('orders')); 
-   
+   */
+  $order_id="423";
+  $order = new WC_Order($order_id);
+  echo $order->lddfw_driverid;
+  print_r($order);
+  assign_delivery_driver($order_id,60,'store');
   // Output needs to be return
   return "hola";
   } 
   // register shortcode
   add_shortcode('greeting', 'wpb_demo_shortcode'); 
+
+
+    function assign_delivery_driver( $order_id, $driver_id, $operator )
+  {
+      $order = wc_get_order( $order_id );
+      $order_driverid = get_post_meta( $order_id, 'lddfw_driverid', true );
+      // Delete driver cache.
+      lddfw_delete_cache( 'driver', $order_driverid );
+      // Delete orders cache.
+      lddfw_delete_cache( 'orders', '' );
+      $driver = get_userdata( $driver_id );
+      
+      if ( !empty($driver) && $driver_id !== $order_driverid && '-1' !== $driver_id && '' !== $driver_id ) {
+          // Delete driver cache.
+          lddfw_delete_cache( 'driver', $driver_id );
+          $driver_name = $driver->display_name;
+          $note = __( 'Delivery driver has been assigned to order.', 'lddfw' );
+          $user_note = '';
+          // Update order driver.
+          lddfw_update_post_meta( $order_id, 'lddfw_driverid', $driver_id );
+          // Update assigned date.
+          update_user_meta( $driver_id, 'lddfw_assigned_date', date_i18n( 'Y-m-d H:i:s' ) );
+          /**
+           * Update order status to driver assigned.
+           */
+          $lddfw_driver_assigned_status = get_option( 'lddfw_driver_assigned_status', '' );
+          $lddfw_processing_status = get_option( 'lddfw_processing_status', '' );
+          $current_order_status = 'wc-' . $order->get_status();
+          if ( '' !== $lddfw_driver_assigned_status && $current_order_status === $lddfw_processing_status ) {
+              $order->update_status( $lddfw_driver_assigned_status, '' );
+          }
+          $order->save();
+          $order->add_order_note( $note );
+      }
+  
+  }
