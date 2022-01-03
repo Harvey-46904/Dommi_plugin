@@ -11,7 +11,6 @@ License: GPLv2
 require __DIR__ . '/vendor/autoload.php';
 require_once(ABSPATH.'wp-includes/pluggable.php');
 require_once(ABSPATH . 'wp-admin/includes/file.php');
-require_once(ABSPATH . 'wp-content/plugins/local-delivery-drivers-for-woocommerce-premium/includes/class-lddfw-driver.php');
 
 use Automattic\WooCommerce\Client;
 // Cuando el plugin se active se crea la tabla para recoger los datos si no existe
@@ -134,7 +133,13 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
    $pedido=$woocommerce->post('orders', $data);
   $id_pedido=$pedido->id;
 echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
-assign_delivery_driver( $id_pedido, $id_driver, 'store' );
+
+
+ // assign_delivery_driver( $id_pedido, $id_driver, 'store' );
+ if (class_exists('LDDFW_Driver')) {
+  assign_delivery_driver( $id_pedido, $id_driver, 'store' );
+}
+
 }
 
 
