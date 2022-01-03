@@ -287,6 +287,8 @@ function domicilio_Dommi_piagio(){
          echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
          wp_die();
         
+      }else {
+        echo "los datos no estan completos ";
       }
 
 
