@@ -74,7 +74,7 @@ function comprobar_sesion(){
     //print_r($hf_user);
     return true;
   }else{
-    echo do_shortcode( ' [woocommerce_my_account] ' );
+    echo do_shortcode( ' [mensajero_dommi_cliente] ' );
   }
 }
 
@@ -222,7 +222,7 @@ function domicilio_Dommi_moto(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [woocommerce_my_account] ' );
+      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
 
       return ob_get_clean();
     }
@@ -306,7 +306,7 @@ function domicilio_Dommi_piagio(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [woocommerce_my_account] ' );
+      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
 
       return ob_get_clean();
     }
@@ -426,7 +426,7 @@ function domicilio_Dommi_vehiculos(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [woocommerce_my_account] ' );
+      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
 
       return ob_get_clean();
     }
@@ -511,7 +511,7 @@ function domicilio_Dommi_carguero(){
       echo '<div class="alert alert-danger" role="alert">
       Debes estar registrado por motivos de facturación electrónica
     </div>';
-      echo do_shortcode( ' [woocommerce_my_account] ' );
+      echo do_shortcode( ' [mensajero_dommi_cliente] ' );
 
       return ob_get_clean();
     }
