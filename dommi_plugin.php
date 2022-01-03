@@ -54,6 +54,8 @@ add_shortcode('domicilio_Dommi_vehiculos', 'domicilio_Dommi_vehiculos');
 add_shortcode('domicilio_Dommi_carguero', 'domicilio_Dommi_carguero');
 add_shortcode('mensajero_dommi', 'registro_mensajero');
 add_shortcode('mensajero_dommi_cliente', 'agregar_usuario_cliente');
+add_shortcode('dommi_mudanza', 'formulario_mudanzas');
+
 
 function your_function() {
     ?>
@@ -78,7 +80,244 @@ function comprobar_sesion(){
   }
 }
 
+function formulario_mudanzas(){
+  ob_start();
+  ?>
+<form id="form-mudanzas" style="display:none;" >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                
+                <div class="form-group">
+                    <div class="form-group">
+    <label style="color:#390066">Nombre</label>
+    <input type="text" name="nombres" id="nombres" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  <div class="form-group">
+    <label style="color:#390066">Teléfono / Celular</label>
+    <input type="text" name="telefono" id="telefono" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  <br>
+  <div class="form-group">
+    <label style="color:#390066">Datos de Mudanza</label>
+    <br><br>
+    <label style="color:#390066">Ciudad desde donde se muda (Origen)</label>
+    <input type="text" name="ciudadorigen" id="ciudadorigen" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  <div class="form-group">
+    <label style="color:#390066">Dirección desde donde se muda(Origen)</label>
+    <input type="text" name="direccionorigen" id="direccionorigen" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  <br>
+  <div class="form-group">
+    <label style="color:#390066">Ciudad hacia donde se muda (Destino)</label>
+    <input type="text" name="ciudaddestino" id="ciudaddestino" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  
+ 
+  <div class="form-group">
+    <label style="color:#390066">Dirección hacia donde se muda (Destino)</label>
+    <input type="text" name="direcciondestino" id="direcciondestino" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066">Se muda desde</label>
+    <select class="form-control" name="desdeorigen" id="desdeorigen"  style="background-color:#DFD5ED;">
+      <option>Casa</option>
+      <option>Edificio</option>
+      <option>Conjunto</option>
+      <option>Oficina</option>
+    </select>
+  </div>
+     
+ <div class="form-group" id="pisodesde" style="display: none;" >
+    <label style="color:#390066">Piso #</label>
+    <input type="number" name="pisodesdeorigen" id="pisodesdeorigen" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  
+  
+  <div class="form-group">
+    <label style="color:#390066">Se muda hasta</label>
+    <select class="form-control" id="pisohastadestino" name="pisohastadestino" style="background-color:#DFD5ED;">
+      <option>Casa</option>
+      <option>Edificio</option>
+      <option>Conjunto</option>
+      <option>Oficina</option>
+    </select>
+  </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    
+					<div class="form-group" id="pisohasta" style="display: none;" >
+    <label style="color:#390066">Piso #</label>
+    <input type="number" class="form-control" style="background-color:#DFD5ED;" id="numpiso">
+  </div>
+  
+  <br>
+  <div class="form-group">
+    <label style="color:#390066"># Camas</label>
+    <select class="form-control" id="numcamas" name="numcamas" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Salas</label>
+    <select class="form-control" id="numsalas" name="numsalas" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Armarios</label>
+    <select class="form-control" id="numarmarios" name="numarmarios" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Comedores</label>
+    <select class="form-control" id="numcomedores" name="numcomedores" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Tocadores</label>
+    <select class="form-control" id="numtocadores" name="numtocadores" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Televisores</label>
+    <select class="form-control" id="numtv" name="numtv" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Mesas de Noche</label>
+    <select class="form-control" id="nummesanoche" name="nummesanoche" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Neveras</label>
+    <select class="form-control" id="numneveras" name="numneveras" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066"># Lavadoras</label>
+    <select class="form-control" id="numlavadoras" name="numlavadoras" style="background-color:#DFD5ED;">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5+</option>
+    </select>
+  </div>
+					
+                </div>
+            </div>
+        </div>
+    </div>
+	<br>
+	<div class="form-group text-center">
+	    <button type="button" class="btn btn-primary " onclick="enviar_wpp()" >COTIZAR MUDANZA</button>
+	</div>
+  
+  </form>
 
+    <script>
+      jQuery("#desdeorigen").on('change', function(event) {
+        var title=jQuery("#desdeorigen").val();
+        if(title=="Oficina" || title=="Edificio"){
+            jQuery("#pisodesde").show();
+        }else{
+            jQuery("#pisodesde").hide(); 
+        }
+    });
+    </script>
+
+    <script>
+      jQuery("#pisohastadestino").on('change', function(event) {
+        var title=jQuery("#pisohastadestino").val();
+        if(title=="Oficina" || title=="Edificio"){
+            jQuery("#pisohasta").show();
+        }else{
+          jQuery("#pisohasta").hide(); 
+        }
+    });
+    </script>
+    <script>
+    function enviar_wpp(){
+      var nombres = jQuery("#nombres").val();
+      var telefono= jQuery("#telefono").val();
+      var ciudadorigen= jQuery("#ciudadorigen").val();
+      var direccionorigen= jQuery("#direccionorigen").val();
+      var ciudaddestino= jQuery("#ciudaddestino").val();
+      var direcciondestino= jQuery("#direcciondestino").val();
+      var desdeorigen= jQuery("#desdeorigen").val();
+      var pisodesdeorigen= jQuery("#pisodesdeorigen").val();
+      var pisohastadestino= jQuery("#pisohastadestino").val();
+      var numpiso= jQuery("#numpiso").val();
+      var numcamas= jQuery("#numcamas").val();
+      var numsalas= jQuery("#numsalas").val();
+      var numarmarios= jQuery("#numarmarios").val();
+      var numcomedores= jQuery("#numcomedores").val();
+      var numtocadores= jQuery("#numtocadores").val();
+      var numtv= jQuery("#numtv").val();
+      var nummesanoche= jQuery("#nummesanoche").val();
+      var numneveras= jQuery("#numneveras").val();
+      var numlavadoras= jQuery("#numlavadoras").val();
+
+
+      console.log(nombres);
+      mensaje="Hola%2C%20soy%3A%20"+nombres+"%2C%20mi%20tel%C3%A9fono%20es%3A%20"+telefono+"%20estoy%20interesado%20en%20cotizar%20%0Ael%20valor%20de%20una%20mudanza%20con%20Dommi%2C%20teniendo%20en%20cuenta%20la%20siguiente%20informaci%C3%B3n%3A%0A%0ADATOS%20OR%C3%8DGEN%20DE%20MUDANZA%0ACiudad%20desde%20donde%20me%20mudo%3A%20"+ciudadorigen+"%0ADirecci%C3%B3n%20desde%20donde%20me%20mudo%3A%20"+direccionorigen+"%0A%0ADATOS%20DESTINO%20DE%20MUDANZA%0ACiudad%20hacia%20donde%20me%20mudo%3A%20"+ciudaddestino+"%0ADirecci%C3%B3n%20hacia%20donde%20me%20mudo%3A%20"+direcciondestino+"%0A%0AMe%20mudo%20desde%3A%20"+desdeorigen+"%0APiso%20%23%3A%20"+pisodesdeorigen+"%0A%0AMe%20mudo%20a%3A%20"+pisohastadestino+"%0APiso%20%23%3A%20"+numpiso+"%0A%0ALlevo%20"+numcamas+"%20camas%0A%0ALlevo%20"+numsalas+"%20juegos%20de%20sala%0A%0ALlevo%20"+numarmarios+"%20armarios%20o%20closet%0A%0ALlevo%20"+numcomedores+"%20comedores%0A%0ALlevo%20"+numtocadores+"%20tocadores%0A%0ALlevo%20"+numtv+"%20Televisores%0A%0ALlevo%20"+nummesanoche+"%20mesas%20de%20noche%0A%0ALlevo%20"+numneveras+"%20neveras%0A%0ALlevo%20"+numlavadoras+"%20lavadoras%0A%0AEste%20es%20el%20inventario%20de%20los%20objetos%20que%20llevar%C3%A9%20en%20mi%20mudanza.%0A%0A%C2%BFCu%C3%A1l%20es%20el%20valor%20a%20cancelar%20por%20el%20servicio%3F%0A%0APor%20favor%20comun%C3%ADcate%20conmigo%3A%20"+telefono+"%20preguntar%20por%20"+nombres+".%0A%0AMuchas%20gracias%21";
+    window.open("https://api.whatsapp.com/send/?phone=573145270909&text="+mensaje, "Dommi");
+    }
+    </script>
+    <?php
+    return ob_get_clean();
+}
 
 function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega
 ) 
@@ -145,7 +384,15 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
   );
       
    $pedido=$woocommerce->post('orders', $data);
+
+
   $id_pedido=$pedido->id;
+$mensaje_nota="Deseo".$deseo .",Notas/observaciones". $entrega;
+  $data = [
+    'note' => $mensaje_nota
+    ];
+
+ $woocommerce->post('orders/'.$id_pedido.'/notes', $data);
 //echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
 $order = new WC_Order( $id_pedido );
 $order->update_status( 'processing' );
