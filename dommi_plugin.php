@@ -164,7 +164,45 @@ assign_delivery_driver( $id_pedido, $id_driver, 'store' );
 function domicilio_Dommi_moto(){
   ob_start();
   if(is_user_logged_in()){
+    if(
+      $_POST['nombres'] != ''
+     AND $_POST['contacto'] != ''
+     AND $_POST['email'] != ''
+     AND $_POST['recogida'] != ''
+     AND $_POST['deseo'] != ''
+     AND  $_POST['nombre_recibe'] != ''
+     AND $_POST['entrega'] != ''
+     AND $_POST['telefono_recibe'] != ''
+     AND $_POST['deseo1'] != ''
+      ){
 
+          $tipo="Moto";
+          $nombres_domipiaggio= sanitize_text_field($_POST['nombres']);
+          $tel_domipiaggio= sanitize_text_field($_POST['contacto']);
+          $email_domipiaggio= sanitize_text_field($_POST['email']);
+          $recogida_domipiaggio= sanitize_text_field($_POST['recogida']);
+          $deseo_domipiaggio= sanitize_text_field($_POST['deseo']);
+          $recibe_domipiaggio= sanitize_text_field($_POST['nombre_recibe']);
+          $direntrega_domipiaggio= sanitize_text_field($_POST['entrega']);
+          $telrecibe_domipiaggio= sanitize_text_field($_POST['telefono_recibe']);
+          $notas_domipiaggio= sanitize_text_field($_POST['deseo1']);
+
+          $nombres=$nombres_domipiaggio;
+          $apellidos="";
+          $contacto=$tel_domipiaggio;
+          $email=$email_domipiaggio;
+          $recogida=$recogida_domipiaggio;
+          $deseo=$deseo_domipiaggio;
+          $nombre_recibe= $recibe_domipiaggio;
+          $apellido_recibe="";
+          $entrega=$notas_domipiaggio;
+          
+          agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
+         $comprobador=2;
+         echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
+         wp_die();
+        
+      }
 
    $sesiones=obtener_datos_de_sesion();
    
@@ -222,7 +260,7 @@ function domicilio_Dommi_moto(){
             <br>
             <div class="form-group">
               <label style="color:#390066">Notas/Observaciones</label>
-              <textarea class="form-control" id="deseo"  style="background-color:#DFD5ED;" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
+              <textarea class="form-control" id="deseo"  style="background-color:#DFD5ED;" rows="3" name="deseo1" placeholder="Información adicional o necesaria para el domicilio.
       "></textarea>
             </div>
             <br>
