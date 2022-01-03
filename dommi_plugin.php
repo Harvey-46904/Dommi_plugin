@@ -133,11 +133,13 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
    $pedido=$woocommerce->post('orders', $data);
   $id_pedido=$pedido->id;
 echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
-
+$order = new WC_Order( $id_pedido );
+$order->update_status( 'processing' );
+ 
 
  // assign_delivery_driver( $id_pedido, $id_driver, 'store' );
  if (class_exists('LDDFW_Driver')) {
-  assign_delivery_driver( $id_pedido, $id_driver, 'store' );
+  //assign_delivery_driver( $id_pedido, $id_driver, 'store' );
 }
 
 }
