@@ -268,7 +268,7 @@ function domicilio_Dommi_piagio(){
       $_POST['nombres-domipiaggio'] != ''
      AND $_POST['tel-domipiaggio'] != ''
      AND $_POST['email-domipiaggio'] != ''
-     AND $_POST['recogida-domicarguero'] != ''
+     AND $_POST['recogida-domipiaggio'] != ''
      AND $_POST['deseo-domipiaggio'] != ''
      AND  $_POST['recibe-domipiaggio'] != ''
      AND $_POST['direntrega-domipiaggio'] != ''
@@ -325,7 +325,7 @@ function domicilio_Dommi_piagio(){
      
       <div class="form-group">
         <label style="color:#390066">Teléfono / Celular</label>
-        <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domipiaggio" name="tel-domipiaggioo" style="background-color:#DFD5ED;">
+        <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domipiaggio" name="tel-domipiaggio" style="background-color:#DFD5ED;">
       </div>
       
       <div class="form-group">
