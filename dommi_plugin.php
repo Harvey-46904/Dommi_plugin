@@ -340,14 +340,6 @@ function formulario_mudanzas(){
 function domicilio_medicamentos(){
   ob_start();
   if(is_user_logged_in()){
-   if($_POST['nombre'] != '' )echo 1;
-   if($_POST['telefono'] != '' )echo 2;
-   if($_POST['email'] != '' )echo 3;
-   if($_POST['desc-tramite'] != '' )echo 4;
-   if($_POST['tel-recibe'] != '' )echo 5;
-   if($_POST['observaciones'] != '' )echo 6;
-   if($_POST['papeles-documentos'] != '')echo 7;
-   if(isset($_FILES['pdf-documentos']))echo 8;
 
     if(
       $_POST['nombre'] != '' AND
