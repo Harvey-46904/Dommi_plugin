@@ -87,6 +87,19 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
   if($tipo=="Vehiculo"){
       $id_driver="59";
   }
+  switch ($tipo) {
+    case "Vehiculo":
+        $id_driver="64";
+        break;
+    case "Piaggio":
+        $id_driver="62";
+        break;
+    case 2:
+        echo "i es igual a 2";
+        break;
+}
+
+  
         $data = [
             'payment_method' => 'bacs',
             'payment_method_title' => 'nequi',
@@ -150,6 +163,8 @@ assign_delivery_driver( $id_pedido, $id_driver, 'store' );
 function domicilio_Dommi_moto(){
   ob_start();
   if(is_user_logged_in()){
+
+
    $sesiones=obtener_datos_de_sesion();
    
    $nombre=$sesiones[0];
@@ -185,36 +200,36 @@ function domicilio_Dommi_moto(){
       <div class="form-group">
         <label style="color:#390066">¿Qué deseas?</label>
         <textarea class="form-control" id="deseo" style="background-color:#DFD5ED;" rows="3" name="deseo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
-  "></textarea>
-        </div>
-        
-      
-        <div class="form-group">
-          <label style="color:#390066">¿Nombres de quien recibe?</label>
-          <input type="text" class="form-control" style="background-color:#DFD5ED;" name="nombre_recibe">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Dirección donde entregamos</label>
-          <input type="text" class="form-control" style="background-color:#DFD5ED;" name="entrega">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Teléfonoo de quien recibe</label>
-          <input type="text" class="form-control" style="background-color:#DFD5ED;" name="telefono_recibe">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Notas/Observaciones</label>
-          <textarea class="form-control" id="deseo"  style="background-color:#DFD5ED;" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
-  "></textarea>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
-      </form>
-      
-      </script>
-      </div>
+      "></textarea>
+            </div>
+            
+          
+            <div class="form-group">
+              <label style="color:#390066">¿Nombres de quien recibe?</label>
+              <input type="text" class="form-control" style="background-color:#DFD5ED;" name="nombre_recibe">
+            </div>
+            <br>
+            <div class="form-group">
+              <label style="color:#390066">Dirección donde entregamos</label>
+              <input type="text" class="form-control" style="background-color:#DFD5ED;" name="entrega">
+            </div>
+            <br>
+            <div class="form-group">
+              <label style="color:#390066">Teléfonoo de quien recibe</label>
+              <input type="text" class="form-control" style="background-color:#DFD5ED;" name="telefono_recibe">
+            </div>
+            <br>
+            <div class="form-group">
+              <label style="color:#390066">Notas/Observaciones</label>
+              <textarea class="form-control" id="deseo"  style="background-color:#DFD5ED;" rows="3" name="deseo" placeholder="Información adicional o necesaria para el domicilio.
+      "></textarea>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+          </form>
+          
+          </script>
+    </div>
 
       <?php
       // Devuelve el contenido del buffer de salida
@@ -233,6 +248,48 @@ function domicilio_Dommi_moto(){
 function domicilio_Dommi_piagio(){
   ob_start();
   if(is_user_logged_in()){
+
+    if(
+      $_POST['nombres-domipiaggio'] != ''
+     AND $_POST['tel-domipiaggio'] != ''
+     AND $_POST['email-domipiaggio'] != ''
+     AND $_POST['recogida-domicarguero'] != ''
+     AND $_POST['deseo-domipiaggio'] != ''
+     AND  $_POST['recibe-domipiaggio'] != ''
+     AND $_POST['direntrega-domipiaggio'] != ''
+     AND $_POST['telrecibe-domipiaggio'] != ''
+     AND $_POST['notas-domipiaggio'] != ''
+      ){
+
+          $tipo="Piaggio";
+          $nombres_domipiaggio= sanitize_text_field($_POST['nombres-domipiaggio']);
+          $tel_domipiaggio= sanitize_text_field($_POST['tel-domipiaggio']);
+          $email_domipiaggio= sanitize_text_field($_POST['email-domipiaggio']);
+          $recogida_domipiaggio= sanitize_text_field($_POST['recogida-domipiaggio']);
+          $deseo_domipiaggio= sanitize_text_field($_POST['deseo-domipiaggio']);
+          $recibe_domipiaggio= sanitize_text_field($_POST['recibe-domipiaggio']);
+          $direntrega_domipiaggio= sanitize_text_field($_POST['direntrega-domipiaggio']);
+          $telrecibe_domipiaggio= sanitize_text_field($_POST['telrecibe-domipiaggio']);
+          $notas_domipiaggio= sanitize_text_field($_POST['notas-domipiaggio']);
+
+          $nombres=$nombres_domipiaggio;
+          $apellidos="";
+          $contacto=$tel_domipiaggio;
+          $email=$email_domipiaggio;
+          $recogida=$recogida_domipiaggio;
+          $deseo=$deseo_domipiaggio;
+          $nombre_recibe= $recibe_domipiaggio;
+          $apellido_recibe="";
+          $entrega=$notas_domipiaggio;
+          
+          agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
+         $comprobador=2;
+         echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
+         wp_die();
+        
+      }
+
+
     $sesiones=obtener_datos_de_sesion();
    
    $nombre=$sesiones[0];
