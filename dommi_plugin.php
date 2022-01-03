@@ -48,6 +48,22 @@ function tbl_domiciliarios()
     dbDelta($query); // Lanza la consulta para crear la tabla de manera segura
 }
 
+
+/*
+CREATE TABLE IF NOT EXISTS wp_medicamentos (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        nombre varchar(40) NOT NULL,
+        telefono varchar(100) NOT NULL,
+        email varchar(100) NOT NULL,
+        desc_tramite varchar(100) NOT NULL,
+        tel_recibe varchar(100) NOT NULL,
+        observaciones varchar(100) NOT NULL,
+        papeles_documentos varchar(100) NOT NULL,
+        pdf_documentos varchar(100) NOT NULL,
+        created_at datetime NOT NULL,
+        UNIQUE (id)
+        )
+*/
 add_shortcode('domicilios_dommi_moto', 'domicilio_Dommi_moto');
 add_shortcode('domicilio_Dommi_piagio', 'domicilio_Dommi_piagio');
 add_shortcode('domicilio_Dommi_vehiculos', 'domicilio_Dommi_vehiculos');
@@ -55,6 +71,7 @@ add_shortcode('domicilio_Dommi_carguero', 'domicilio_Dommi_carguero');
 add_shortcode('mensajero_dommi', 'registro_mensajero');
 add_shortcode('mensajero_dommi_cliente', 'agregar_usuario_cliente');
 add_shortcode('dommi_mudanza', 'formulario_mudanzas');
+add_shortcode('dommi_medicamentos', 'domicilio_medicamentos');
 
 
 function your_function() {
@@ -81,190 +98,190 @@ function comprobar_sesion(){
 }
 
 function formulario_mudanzas(){
-  ob_start();
-  ?>
-<form id="form-mudanzas" style="display:none;" >
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                
-                <div class="form-group">
-                    <div class="form-group">
-    <label style="color:#390066">Nombre</label>
-    <input type="text" name="nombres" id="nombres" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  <div class="form-group">
-    <label style="color:#390066">Teléfono / Celular</label>
-    <input type="text" name="telefono" id="telefono" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  <br>
-  <div class="form-group">
-    <label style="color:#390066">Datos de Mudanza</label>
-    <br><br>
-    <label style="color:#390066">Ciudad desde donde se muda (Origen)</label>
-    <input type="text" name="ciudadorigen" id="ciudadorigen" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  <div class="form-group">
-    <label style="color:#390066">Dirección desde donde se muda(Origen)</label>
-    <input type="text" name="direccionorigen" id="direccionorigen" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  <br>
-  <div class="form-group">
-    <label style="color:#390066">Ciudad hacia donde se muda (Destino)</label>
-    <input type="text" name="ciudaddestino" id="ciudaddestino" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  
- 
-  <div class="form-group">
-    <label style="color:#390066">Dirección hacia donde se muda (Destino)</label>
-    <input type="text" name="direcciondestino" id="direcciondestino" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066">Se muda desde</label>
-    <select class="form-control" name="desdeorigen" id="desdeorigen"  style="background-color:#DFD5ED;">
-      <option>Casa</option>
-      <option>Edificio</option>
-      <option>Conjunto</option>
-      <option>Oficina</option>
-    </select>
-  </div>
-     
- <div class="form-group" id="pisodesde" style="display: none;" >
-    <label style="color:#390066">Piso #</label>
-    <input type="number" name="pisodesdeorigen" id="pisodesdeorigen" class="form-control" style="background-color:#DFD5ED;">
-  </div>
-  
-  
-  <div class="form-group">
-    <label style="color:#390066">Se muda hasta</label>
-    <select class="form-control" id="pisohastadestino" name="pisohastadestino" style="background-color:#DFD5ED;">
-      <option>Casa</option>
-      <option>Edificio</option>
-      <option>Conjunto</option>
-      <option>Oficina</option>
-    </select>
-  </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    
-					<div class="form-group" id="pisohasta" style="display: none;" >
-    <label style="color:#390066">Piso #</label>
-    <input type="number" class="form-control" style="background-color:#DFD5ED;" id="numpiso">
-  </div>
-  
-  <br>
-  <div class="form-group">
-    <label style="color:#390066"># Camas</label>
-    <select class="form-control" id="numcamas" name="numcamas" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Salas</label>
-    <select class="form-control" id="numsalas" name="numsalas" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Armarios</label>
-    <select class="form-control" id="numarmarios" name="numarmarios" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Comedores</label>
-    <select class="form-control" id="numcomedores" name="numcomedores" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Tocadores</label>
-    <select class="form-control" id="numtocadores" name="numtocadores" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Televisores</label>
-    <select class="form-control" id="numtv" name="numtv" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Mesas de Noche</label>
-    <select class="form-control" id="nummesanoche" name="nummesanoche" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Neveras</label>
-    <select class="form-control" id="numneveras" name="numneveras" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label style="color:#390066"># Lavadoras</label>
-    <select class="form-control" id="numlavadoras" name="numlavadoras" style="background-color:#DFD5ED;">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5+</option>
-    </select>
-  </div>
-					
-                </div>
-            </div>
-        </div>
+    ob_start();
+    ?>
+  <form id="form-mudanzas" style="display:none;" >
+      <div class="container">
+          <div class="row">
+              <div class="col-md-6">
+                  
+                  <div class="form-group">
+                      <div class="form-group">
+      <label style="color:#390066">Nombre</label>
+      <input type="text" name="nombres" id="nombres" class="form-control" style="background-color:#DFD5ED;">
     </div>
-	<br>
-	<div class="form-group text-center">
-	    <button type="button" class="btn btn-primary " onclick="enviar_wpp()" >COTIZAR MUDANZA</button>
-	</div>
+    <div class="form-group">
+      <label style="color:#390066">Teléfono / Celular</label>
+      <input type="text" name="telefono" id="telefono" class="form-control" style="background-color:#DFD5ED;">
+    </div>
+    <br>
+    <div class="form-group">
+      <label style="color:#390066">Datos de Mudanza</label>
+      <br><br>
+      <label style="color:#390066">Ciudad desde donde se muda (Origen)</label>
+      <input type="text" name="ciudadorigen" id="ciudadorigen" class="form-control" style="background-color:#DFD5ED;">
+    </div>
+    <div class="form-group">
+      <label style="color:#390066">Dirección desde donde se muda(Origen)</label>
+      <input type="text" name="direccionorigen" id="direccionorigen" class="form-control" style="background-color:#DFD5ED;">
+    </div>
+    <br>
+    <div class="form-group">
+      <label style="color:#390066">Ciudad hacia donde se muda (Destino)</label>
+      <input type="text" name="ciudaddestino" id="ciudaddestino" class="form-control" style="background-color:#DFD5ED;">
+    </div>
+    
   
-  </form>
+    <div class="form-group">
+      <label style="color:#390066">Dirección hacia donde se muda (Destino)</label>
+      <input type="text" name="direcciondestino" id="direcciondestino" class="form-control" style="background-color:#DFD5ED;">
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066">Se muda desde</label>
+      <select class="form-control" name="desdeorigen" id="desdeorigen"  style="background-color:#DFD5ED;">
+        <option>Casa</option>
+        <option>Edificio</option>
+        <option>Conjunto</option>
+        <option>Oficina</option>
+      </select>
+    </div>
+      
+  <div class="form-group" id="pisodesde" style="display: none;" >
+      <label style="color:#390066">Piso #</label>
+      <input type="number" name="pisodesdeorigen" id="pisodesdeorigen" class="form-control" style="background-color:#DFD5ED;">
+    </div>
+    
+    
+    <div class="form-group">
+      <label style="color:#390066">Se muda hasta</label>
+      <select class="form-control" id="pisohastadestino" name="pisohastadestino" style="background-color:#DFD5ED;">
+        <option>Casa</option>
+        <option>Edificio</option>
+        <option>Conjunto</option>
+        <option>Oficina</option>
+      </select>
+    </div>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      
+            <div class="form-group" id="pisohasta" style="display: none;" >
+      <label style="color:#390066">Piso #</label>
+      <input type="number" class="form-control" style="background-color:#DFD5ED;" id="numpiso">
+    </div>
+    
+    <br>
+    <div class="form-group">
+      <label style="color:#390066"># Camas</label>
+      <select class="form-control" id="numcamas" name="numcamas" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Salas</label>
+      <select class="form-control" id="numsalas" name="numsalas" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Armarios</label>
+      <select class="form-control" id="numarmarios" name="numarmarios" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Comedores</label>
+      <select class="form-control" id="numcomedores" name="numcomedores" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Tocadores</label>
+      <select class="form-control" id="numtocadores" name="numtocadores" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Televisores</label>
+      <select class="form-control" id="numtv" name="numtv" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Mesas de Noche</label>
+      <select class="form-control" id="nummesanoche" name="nummesanoche" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Neveras</label>
+      <select class="form-control" id="numneveras" name="numneveras" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label style="color:#390066"># Lavadoras</label>
+      <select class="form-control" id="numlavadoras" name="numlavadoras" style="background-color:#DFD5ED;">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5+</option>
+      </select>
+    </div>
+            
+                  </div>
+              </div>
+          </div>
+      </div>
+    <br>
+    <div class="form-group text-center">
+        <button type="button" class="btn btn-primary " onclick="enviar_wpp()" >COTIZAR MUDANZA</button>
+    </div>
+    
+    </form>
 
     <script>
       jQuery("#desdeorigen").on('change', function(event) {
@@ -318,6 +335,235 @@ function formulario_mudanzas(){
     <?php
     return ob_get_clean();
 }
+
+
+function domicilio_medicamentos(){
+  ob_start();
+  if(is_user_logged_in()){
+   if($_POST['nombre'] != '' )echo 1;
+   if($_POST['telefono'] != '' )echo 2;
+   if($_POST['email'] != '' )echo 3;
+   if($_POST['desc-tramite'] != '' )echo 4;
+   if($_POST['tel-recibe'] != '' )echo 5;
+   if($_POST['observaciones'] != '' )echo 6;
+   if($_POST['papeles-documentos'] != '')echo 7;
+   if(isset($_FILES['pdf-documentos']))echo 8;
+
+    if(
+      $_POST['nombre'] != '' AND
+      $_POST['telefono'] != '' AND
+      $_POST['email'] != '' AND
+      $_POST['desc-tramite'] != '' AND
+      $_POST['tel-recibe'] != '' AND
+      $_POST['observaciones'] != '' AND
+      (
+      $_POST['papeles-documentos'] != '' OR
+      isset($_FILES['pdf-documentos'])   )
+      ){
+        global $wpdb;
+        $pdf_documentos="";
+        $papeles_documentos="";
+          $nombre= sanitize_text_field($_POST['nombre']);
+          $telefono= sanitize_text_field($_POST['telefono']);
+          $email= sanitize_text_field($_POST['email']);
+          $desc_tramite= sanitize_text_field($_POST['desc-tramite']);
+          $tel_recibe= sanitize_text_field($_POST['tel-recibe']);
+          $observaciones= sanitize_text_field($_POST['observaciones']);
+          if($_POST['papeles-documentos'] != ''){
+            $papeles_documentos= sanitize_text_field($_POST['papeles-documentos']);
+            $pdf_documentos="none";
+          }
+         else{ 
+                $papeles_documentos="none";  
+                global $wp_filesystem;
+                WP_Filesystem();
+                $name_file = $_FILES['pdf-documentos']['name'];
+                $tmp_name = $_FILES['pdf-documentos']['tmp_name'];
+                $nombres=$fecha."H".$name_file;
+                $allow_extensions = ['pdf', 'xlsx', 'csv'];
+                $path_parts = pathinfo($name_file);
+                $ext = $path_parts['extension'];
+
+                if ( !in_array($ext, $allow_extensions) ) {
+                  echo "Error -El tipo de archivo permitido es PDF";
+                  return;
+                }
+
+                $content_directory = $wp_filesystem->wp_content_dir() . 'uploads/medicamentos/';
+                $wp_filesystem->mkdir( $content_directory );
+
+
+                if( 
+                  move_uploaded_file( $tmp_name, $content_directory .$nombres ) 
+                ) {
+                echo "documentos subidos";
+              $pdf_documentos=$nombres;
+                }
+
+          }
+         
+          $tabla_aspirantes = $wpdb->prefix . 'medicamentos';
+          $created_at = date('Y-m-d H:i:s');
+            $wpdb->insert(
+              $tabla_aspirantes,array(
+                'nombre'=> $nombre,
+                'telefono'=> $telefono,
+                'email'=>$email,
+                'desc_tramite'=>$desc_tramite,
+                'tel_recibe'=>$tel_recibe,
+                'observaciones'=>$observaciones,
+                'papeles_documentos'=>$papeles_documentos,
+                'pdf_documentos'=>$pdf_documentos,
+                'created_at'=>$created_at,
+
+              )
+              );
+
+     
+
+         echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
+         wp_die();
+        
+      }else {
+       
+      }
+
+   $sesiones=obtener_datos_de_sesion();
+   
+   $nombre=$sesiones[0];
+  $cel=$sesiones[2];;
+  $correo=$sesiones[1];
+
+    $transporte=url_actual();
+    //codigo aqui
+    ?>
+ <form action="<?php get_the_permalink(); ?>" method="POST" enctype="multipart/form-data">
+    <div class="container">
+                
+     <div class="form-group">
+                    
+    <label style="color:#390066">Nombre</label>
+    <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066">Teléfono / Celular</label>
+    <input type="text" id="telefono" name="telefono" value="<?php echo $cel; ?>" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066">Correo electrónico </label>
+    <input type="email" id="email" name="email" class="form-control" value="<?php echo $correo; ?>" style="background-color:#DFD5ED;">
+  </div>
+
+<div class="form-group">
+    <label style="color:#390066">¿Qué va a retirar / autorizar?</label>
+    <textarea class="form-control" id="desc-tramite" name="desc-tramite" rows="3" placeholder="Por favor describa su trámite, de manera clara y precisa. Tenga en cuenta la documentación que debe entregarnos para poder retirar." style="background-color:#DFD5ED;"></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066" for="exampleFormControlSelect1">¿Tu medicamento tiene autorización?</label>
+    <select id="autorización-sino" name="autorización-sino" class="form-control" style="background-color:#DFD5ED;">
+    <option>Elegir una opción</option>
+      <option>SI</option>
+      <option>NO</option>
+    </select>
+  </div>
+  
+  <br>
+  <div class="form-group" id="no-autorizacion" name="no-autorizacion" style="display: none;">
+      <div class="alert alert-warning" role="alert">
+      Recuerde que si debe autorizar se cobra el valor adicional por dicho trámite ( $6.000 )
+    </div>
+     
+  </div>
+  
+  <div class="form-group" id="opciones" name="opciones" style="display: none;" >
+      
+  <div class="form-group">
+    <label style="color:#390066" for="exampleFormControlSelect2">Papeles/Documentos</label>
+    <select id="papeles-sino" name="papeles-sino" class="form-control" style="background-color:#DFD5ED;">
+    <option>Elegir una opción</option>
+      <option>Recoger en direccion (esto tiene un adicional de $2000)</option>
+      <option>Subir papeles por este medio (Sin costo adicional)</option>
+    </select>
+  </div>
+  <div class="form-group" id="direccion-doc" style="display: none;">
+    <label style="color:#390066">Direccion donde se recogen documentos</label>
+    <input type="text" id="papeles-documentos" name="papeles-documentos" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  <div class="form-group" id="direccion-pdf" style="display: none;">
+    <label style="color:#390066">Agrege aqui el pdf de la autorizacíon</label><br>
+    <input type="file" id="pdf-documentos" name="pdf-documentos" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  </div>
+  
+  
+  <div class="form-group">
+    <label style="color:#390066">Teléfono de quien recibe</label>
+    <input type="text" id="tel-recibe" name="tel-recibe" class="form-control" style="background-color:#DFD5ED;">
+  </div>
+  
+  <div class="form-group">
+    <label style="color:#390066">Notas / Observaciones</label>
+    <textarea  style="background-color:#DFD5ED;" class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+  </div>
+
+	<br>
+	<div class="form-group text-center">
+	    <button type="submit" class="btn btn-primary ">SOLICITAR SERVICIO</button>
+	</div>
+  
+  
+  </div>
+</form>
+
+<script>
+   jQuery("#autorización-sino").on('change', function(event) {
+    var title=jQuery("#autorización-sino").val();
+    if(title=="NO"){
+        jQuery("#no-autorizacion").show();
+        jQuery("#opciones").hide();
+    }
+    else{
+       jQuery("#no-autorizacion").hide()
+       jQuery("#opciones").show();
+    }
+    if(title=="Elegir una opción"){
+        jQuery("#no-autorizacion").hide();
+        jQuery("#opciones").hide();
+    }
+});
+</script>
+<script>
+   jQuery("#papeles-sino").on('change', function(event) {
+    var title=jQuery("#papeles-sino").val();
+    if(title=="Recoger en direccion (esto tiene un adicional de $2000)"){
+      jQuery("#direccion-doc").show();
+      jQuery("#direccion-pdf").hide();
+    }
+    if(title=="Subir papeles por este medio (Sin costo adicional)"){
+      jQuery("#direccion-pdf").show();
+      jQuery("#direccion-doc").hide();
+    }
+});
+</script>
+      <?php
+      // Devuelve el contenido del buffer de salida
+      return ob_get_clean();
+    }else {
+      
+      echo '<div class="alert alert-danger" role="alert">
+      Debes estar registrado por motivos de facturación electrónica
+    </div>';
+      echo do_shortcode( ' [woocommerce_my_account] ' );
+
+      return ob_get_clean();
+    }
+}
+
+
+
 
 function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega
 ) 
@@ -1093,7 +1339,8 @@ function registro_mensajero(){
 
  // El hook "admin_menu" permite agregar un nuevo item al menú de administración
 add_action("admin_menu", "dommi_menu");
- 
+add_action("admin_menu", "dommi_medicamentos");
+
 /**
  * Agrega el menú del plugin al escritorio de WordPress
  *
@@ -1104,6 +1351,14 @@ function dommi_menu()
     add_menu_page(
         'Solicitud Mensajeros', 'Aspirantes Mensajeros', 'manage_options', 
         'aspirante_menu', 'Aspirante_admin', 'dashicons-feedback', 75
+    );
+}
+
+function dommi_medicamentos() 
+{
+    add_menu_page(
+        'Medicamentos', 'Medicamentos', 'manage_options', 
+        'Medicamentos_menu', 'table_medicamentos', 'dashicons-feedback', 75
     );
 }
 
@@ -1139,6 +1394,50 @@ function Aspirante_admin()
            // echo '<td>'.$aspirante->Documentos.'</td>';
            echo '<td><a href="../wp-content/zips/'.$aspirante->Documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
            echo '<td> <a id="boton-bonito" href="?page=allentries">Aprobar</a>'.'</td>';
+         echo '</tr>';
+       }
+       echo   '</tbody></table>';
+      
+}
+
+function table_medicamentos()
+{
+    global $wpdb;
+    $tabla_aspirantes = $wpdb->prefix . 'medicamentos';
+    $aspirantes = $wpdb->get_results("SELECT * FROM $tabla_aspirantes");
+   
+    echo '<div class="wrap"><h1>Lista de aspirantes Dommi</h1>';
+    echo '<table class="wp-list-table widefat fixed striped">
+    <thead>
+      <tr>
+        <th scope="col">Nombres</th>
+        <th scope="col">Telefono</th>
+        <th scope="col">Email</th>
+        <th scope="col">Descripción Tramite</th>
+        <th scope="col">Telefono</th>
+        <th scope="col">Observaciones</th>
+        <th scope="col">información</th>
+        
+      </tr>
+    </thead>
+    <tbody>';
+       foreach ($aspirantes as $aspirante){
+         echo '<tr>';
+            echo '<td>'.esc_textarea($aspirante->nombre).'</td>';
+            echo '<td>'.$aspirante->telefono.'</td>';
+            
+            echo '<td>'.$aspirante->email.'</td>';
+            echo '<td>'.$aspirante->desc_tramite.'</td>';
+            echo '<td>'.$aspirante->tel_recibe.'</td>';
+            echo '<td>'.$aspirante->observaciones.'</td>';
+            if($aspirante->papeles_documentos!="none"){
+              echo '<td>'.$aspirante->papeles_documentos.'</td>';
+            }else{
+              echo '<td><a href="../wp-content/uploads/medicamentos/'.$aspirante->pdf_documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
+            }
+           
+           
+          
          echo '</tr>';
        }
        echo   '</tbody></table>';
