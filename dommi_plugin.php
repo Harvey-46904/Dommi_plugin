@@ -316,10 +316,10 @@ function domicilio_Dommi_piagio(){
 
 function domicilio_Dommi_vehiculos(){
   ob_start();
-  $comprobador;
+  $comprobador=3;
   if(is_user_logged_in()){
           if(
-            $comprobador AND
+            $comprobador==1 AND
                 $_POST['nombres-domivehiculo'] != ''
               AND $_POST['tel-domivehiculo'] != ''
               AND  $_POST['email-domivehiculo'] != ''
@@ -353,11 +353,11 @@ function domicilio_Dommi_vehiculos(){
                 $entrega=$direntrega_domivehiculo;
                 
                 agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
-               $comprobador=FALSE;
+               $comprobador=2;
               return ob_get_clean();
             }
             else{
-              $comprobador=TRUE;
+              $comprobador=1;
               $sesiones=obtener_datos_de_sesion();
                 $nombre=$sesiones[0];
                 $cel=$sesiones[2];;
