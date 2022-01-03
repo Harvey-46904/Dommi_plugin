@@ -132,7 +132,7 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
       
    $pedido=$woocommerce->post('orders', $data);
   $id_pedido=$pedido->id;
-echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
+//echo "el id es ".$pedido->id." y el domiciliarioo es id ".$id_driver;
 $order = new WC_Order( $id_pedido );
 $order->update_status( 'processing' );
  
@@ -349,84 +349,82 @@ function domicilio_Dommi_vehiculos(){
           $entrega=$direntrega_domivehiculo;
           
           agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
-          echo '<div class="alert alert-success" role="alert">
-          Domicilio Exitoso Pronto Nos Comunicaremos Con Ud.
-        </div>';
+          echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
         return ob_get_clean();
       }else{
 
       
-    $sesiones=obtener_datos_de_sesion();
-  
-   $nombre=$sesiones[0];
-  $cel=$sesiones[2];;
-  $correo=$sesiones[1];
-    $transporte=url_actual();
-    echo '<script language="javascript">alert("'.$transporte.'");</script>';
-  ?>
-      <div id="form-domicilios" >
-    
-        <form action="<?php get_the_permalink(); ?>" method="POST" >
-        <div class="form-group">
-        <label style="color:#390066">Nombres</label>
-        <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domivehiculo" name="nombres-domivehiculo" style="background-color:#DFD5ED;">
-      </div>
-     
-      <div class="form-group">
-        <label style="color:#390066">Teléfono / Celular</label>
-        <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domivehiculo" name="tel-domivehiculo" style="background-color:#DFD5ED;">
-      </div>
-      
-      <div class="form-group">
-        <br>
-        <label style="color:#390066">Correo electrónico</label>
-        <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domivehiculo" name="email-domivehiculo" style="background-color:#DFD5ED;">
-      </div>
-      <div class="form-group">
-        <label style="color:#390066">Dirección donde recogemos</label>
-        <input type="text" class="form-control" id="recogida-domivehiculo" name="recogida-domivehiculo" style="background-color:#DFD5ED;">
-      </div>
-      
-      <div class="form-group">
-        <label style="color:#390066">¿Qué deseas?</label>
-        <textarea class="form-control" id="deseo-domivehiculo" rows="3" name="deseo-domivehiculo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
-  " style="background-color:#DFD5ED;"></textarea>
-        </div>
-        
-      
-        <div class="form-group">
-          <label style="color:#390066">¿Nombres de quien recibe?</label>
-          <input type="text" class="form-control" id="recibe-domivehiculo" name="recibe-domivehiculo" style="background-color:#DFD5ED;">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Dirección donde entregamos</label>
-          <input type="text" class="form-control" id="direntrega-domivehiculo" name="direntrega-domivehiculo" style="background-color:#DFD5ED;">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Teléfono de quien recibe</label>
-          <input type="text" class="form-control" id="telrecibe-domivehiculo" name="telrecibe-domivehiculo" style="background-color:#DFD5ED;">
-        </div>
-        <br>
-        <div class="form-group">
-          <label style="color:#390066">Notas/Observaciones</label>
-          <textarea class="form-control" id="notas-domivehiculo" rows="3" name="notas-domivehiculo" placeholder="Información adicional o necesaria para el domicilio.
-  " style="background-color:#DFD5ED;"></textarea>
-        </div>
-        <br>
-        <div>
-            <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
-        </div>
-        
-      </form>
-    
-      </div>
+              $sesiones=obtener_datos_de_sesion();
+            
+                $nombre=$sesiones[0];
+                $cel=$sesiones[2];;
+                $correo=$sesiones[1];
+                  $transporte=url_actual();
+                  echo '<script language="javascript">alert("'.$transporte.'");</script>';
+                ?>
+                    <div id="form-domicilios" >
+                  
+                      <form action="<?php get_the_permalink(); ?>" method="POST" >
+                      <div class="form-group">
+                      <label style="color:#390066">Nombres</label>
+                      <input type="text" class="form-control" value="<?php echo $nombre; ?>" id="nombres-domivehiculo" name="nombres-domivehiculo" style="background-color:#DFD5ED;">
+                    </div>
+                  
+                    <div class="form-group">
+                      <label style="color:#390066">Teléfono / Celular</label>
+                      <input type="text" class="form-control" value="<?php echo $cel; ?>" id="tel-domivehiculo" name="tel-domivehiculo" style="background-color:#DFD5ED;">
+                    </div>
+                    
+                    <div class="form-group">
+                      <br>
+                      <label style="color:#390066">Correo electrónico</label>
+                      <input type="email" class="form-control" value="<?php echo $correo; ?>" id="email-domivehiculo" name="email-domivehiculo" style="background-color:#DFD5ED;">
+                    </div>
+                    <div class="form-group">
+                      <label style="color:#390066">Dirección donde recogemos</label>
+                      <input type="text" class="form-control" id="recogida-domivehiculo" name="recogida-domivehiculo" style="background-color:#DFD5ED;">
+                    </div>
+                    
+                    <div class="form-group">
+                      <label style="color:#390066">¿Qué deseas?</label>
+                      <textarea class="form-control" id="deseo-domivehiculo" rows="3" name="deseo-domivehiculo" placeholder="Por favor escribe las indicaciones para el mensajero, se claro y preciso en la información
+                      " style="background-color:#DFD5ED;"></textarea>
+                      </div>
+                      
+                    
+                      <div class="form-group">
+                        <label style="color:#390066">¿Nombres de quien recibe?</label>
+                        <input type="text" class="form-control" id="recibe-domivehiculo" name="recibe-domivehiculo" style="background-color:#DFD5ED;">
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:#390066">Dirección donde entregamos</label>
+                        <input type="text" class="form-control" id="direntrega-domivehiculo" name="direntrega-domivehiculo" style="background-color:#DFD5ED;">
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:#390066">Teléfono de quien recibe</label>
+                        <input type="text" class="form-control" id="telrecibe-domivehiculo" name="telrecibe-domivehiculo" style="background-color:#DFD5ED;">
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:#390066">Notas/Observaciones</label>
+                        <textarea class="form-control" id="notas-domivehiculo" rows="3" name="notas-domivehiculo" placeholder="Información adicional o necesaria para el domicilio.
+                    ground-color:#DFD5ED;"></textarea>
+                      </div>
+                      <br>
+                      <div>
+                          <button type="submit" class="btn btn-primary">SOLICITAR DOMICILIO</button>
+                      </div>
+                      
+                    </form>
+                  
+                    </div>
 
-      <?php
-      // Devuelve el contenido del buffer de salida
-      return ob_get_clean();
-    }
+                    <?php
+                    // Devuelve el contenido del buffer de salida
+                    return ob_get_clean();
+            }
       
     }else {
       
