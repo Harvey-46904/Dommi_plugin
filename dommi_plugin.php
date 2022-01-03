@@ -349,8 +349,12 @@ function domicilio_Dommi_vehiculos(){
           $entrega=$direntrega_domivehiculo;
           
           agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
-        echo "pedido realizado";
-      }
+          echo '<div class="alert alert-success" role="alert">
+          Domicilio Exitoso Pronto Nos Comunicaremos Con Ud.
+        </div>';
+      }else{
+
+      
     $sesiones=obtener_datos_de_sesion();
   
    $nombre=$sesiones[0];
@@ -421,6 +425,8 @@ function domicilio_Dommi_vehiculos(){
       <?php
       // Devuelve el contenido del buffer de salida
       return ob_get_clean();
+    }
+      
     }else {
       
       echo '<div class="alert alert-danger" role="alert">
