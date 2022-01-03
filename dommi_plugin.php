@@ -138,7 +138,7 @@ $order->update_status( 'processing' );
  
 assign_delivery_driver( $id_pedido, $id_driver, 'store' );
 
-echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
+
  // assign_delivery_driver( $id_pedido, $id_driver, 'store' );
  if (class_exists('LDDFW_Driver')) {
   //assign_delivery_driver( $id_pedido, $id_driver, 'store' );
@@ -157,7 +157,7 @@ function domicilio_Dommi_moto(){
   $correo=$sesiones[1];
 
     $transporte=url_actual();
-    echo '<script language="javascript">alert("'.$transporte.'");</script>';
+    
   ?>
   <div id="form-domicilios" >
     
@@ -239,7 +239,7 @@ function domicilio_Dommi_piagio(){
   $cel=$sesiones[2];;
   $correo=$sesiones[1];
     $transporte=url_actual();
-    echo '<script language="javascript">alert("'.$transporte.'");</script>';
+    
   ?>
       <div id="form-domicilios" >
     
@@ -363,7 +363,7 @@ function domicilio_Dommi_vehiculos(){
                 $cel=$sesiones[2];;
                 $correo=$sesiones[1];
                   $transporte=url_actual();
-                  echo '<script language="javascript">alert("'.$transporte.'");</script>';
+                  echo $comprobador;
                 ?>
                     <div id="form-domicilios" >
                   
@@ -449,7 +449,7 @@ function domicilio_Dommi_carguero(){
   $cel=$sesiones[2];
   $correo=$sesiones[1];
     $transporte=url_actual();
-    echo '<script language="javascript">alert("'.$transporte.'");</script>';
+    
   ?>
       <div id="form-domicilios" >
     
