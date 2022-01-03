@@ -319,7 +319,7 @@ function domicilio_Dommi_vehiculos(){
   $comprobador=3;
   if(is_user_logged_in()){
           if(
-            $comprobador==1 AND
+            
                 $_POST['nombres-domivehiculo'] != ''
               AND $_POST['tel-domivehiculo'] != ''
               AND  $_POST['email-domivehiculo'] != ''
