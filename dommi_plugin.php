@@ -352,6 +352,7 @@ function domicilio_Dommi_vehiculos(){
           echo '<div class="alert alert-success" role="alert">
           Domicilio Exitoso Pronto Nos Comunicaremos Con Ud.
         </div>';
+        return ob_get_clean();
       }else{
 
       
