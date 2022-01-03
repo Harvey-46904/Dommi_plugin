@@ -84,9 +84,7 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
 ) 
 {
   $id_driver=0;
-  if($tipo=="Vehiculo"){
-      $id_driver="59";
-  }
+ 
   switch ($tipo) {
     case "Vehiculo":
         $id_driver="64";
@@ -94,9 +92,12 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
     case "Piaggio":
         $id_driver="62";
         break;
-    case 2:
-        echo "i es igual a 2";
+    case "Carguero":
+      $id_driver="63";
         break;
+        case "Moto":
+          $id_driver="59";
+          break;
 }
 
   
@@ -248,21 +249,6 @@ function domicilio_Dommi_moto(){
 function domicilio_Dommi_piagio(){
   ob_start();
   if(is_user_logged_in()){
-
-    if($_POST['nombres-domipiaggio'] != '')echo "este 1 ";
-    if( $_POST['tel-domipiaggio'] != '')echo "este 2 ";
-    if( $_POST['email-domipiaggio'] != '')echo "este3 ";
-    if( $_POST['recogida-domicarguero'] != '')echo "este4";
-    if( $_POST['deseo-domipiaggio'] != '')echo "este5";
-    if(  $_POST['recibe-domipiaggio'] != '')echo "este6";
-    if( $_POST['direntrega-domipiaggio'] != '')echo "este7";
-    if( $_POST['telrecibe-domipiaggio'] != '')echo "este8";
-    if( $_POST['notas-domipiaggio'] != '')echo "este9";
-
-
-
-
-
 
     if(
       $_POST['nombres-domipiaggio'] != ''
@@ -519,6 +505,47 @@ function domicilio_Dommi_vehiculos(){
 function domicilio_Dommi_carguero(){
   ob_start();
   if(is_user_logged_in()){
+    if(
+      $_POST['nombres-domicarguero'] != ''
+     AND $_POST['tel-domicarguero'] != ''
+     AND $_POST['email-domicarguero'] != ''
+    AND  $_POST['recogida-domicarguero'] != ''
+     AND $_POST['deseo-domicarguero'] != ''
+     AND $_POST['recibe-domicarguero'] != ''
+     AND $_POST['direntrega-domicarguero'] != ''
+      AND $_POST['telrecibe-domicarguero'] != ''
+     AND $_POST['notas-domicarguero'] != ''
+      ){
+          $nombres_domicarguero= sanitize_text_field($_POST['nombres-domicarguero']);
+          $tel_domicarguero= sanitize_text_field($_POST['tel-domicarguero']);
+          $email_domicarguero= sanitize_text_field($_POST['email-domicarguero']);
+          $recogida_domicarguero= sanitize_text_field($_POST['recogida-domicarguero']);
+          $deseo_domicarguero= sanitize_text_field($_POST['deseo-domicarguero']);
+          $recibe_domicarguero= sanitize_text_field($_POST['recibe-domicarguero']);
+          $direntrega_domicarguero= sanitize_text_field($_POST['direntrega-domicarguero']);
+          $telrecibe_domicarguero= sanitize_text_field($_POST['telrecibe-domicarguero']);
+          $notas_domicarguero= sanitize_text_field($_POST['notas-domicarguero']);
+
+
+          $tipo="Carguero";
+          $nombres=$nombres_domicarguero;
+          $apellidos="";
+          $contacto=$tel_domicarguero;
+          $email=$email_domicarguero;
+          $recogida=$recogida_domicarguero;
+          $deseo=$deseo_domicarguero;
+          $nombre_recibe= $recibe_domicarguero;
+          $apellido_recibe="";
+          $entrega=$notas_domicarguero;
+          
+          agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
+         
+         echo "<script>location.replace('https://dommi.net/confirmacion-domicilio/');</script>";
+         wp_die();
+      }
+      
+
+
 
     $sesiones=obtener_datos_de_sesion();
    
