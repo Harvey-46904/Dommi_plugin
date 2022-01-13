@@ -115,8 +115,8 @@ function login_woo(){
 
 function validador_sesiones_imagen(){
     if(is_user_logged_in()){
-       echo 'jQuery("#con_sesion").show();';
+       echo '<script>jQuery("#con_sesion").show();</script>';
     }else{
-        echo 'jQuery("#sin_sesion").show();';
+        echo '<script>jQuery("#sin_sesion").show();</script>';
     }
 }
