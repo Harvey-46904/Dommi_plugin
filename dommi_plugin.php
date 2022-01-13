@@ -74,6 +74,7 @@ add_shortcode('dommi_mudanza', 'formulario_mudanzas');
 add_shortcode('dommi_medicamentos', 'domicilio_medicamentos');
 add_shortcode('dommi_descargar', 'boton_descargar');
 add_shortcode('dommi_login', 'login_woo');
+add_shortcode('dommi_notificacion', 'notificacion');
 add_action('wp_footer', 'validador_sesiones_imagen');
 
 
@@ -1564,7 +1565,7 @@ $user = new WP_User($id_ultimo);
 $user->set_role('customer');
 
 //$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
-echo "<script>location.replace('https://dommi.net/login/');</script>";
+echo "<script>location.replace('https://dommi.net/login/?info=%Registro Exitoso%22');</script>";
 
 
   }

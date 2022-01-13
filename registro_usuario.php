@@ -120,3 +120,13 @@ function validador_sesiones_imagen(){
         echo '<script>jQuery("#sin_sesion").show();</script>';
     }
 }
+
+function notificacion(){
+   
+    if(isset($_GET['info'])) {
+      $mensaje=$_GET['info'];
+      echo '<div class="alert alert-success" role="alert">
+      '.$mensaje.'
+    </div>';
+    }
+}
