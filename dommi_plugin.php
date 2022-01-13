@@ -74,7 +74,7 @@ add_shortcode('dommi_mudanza', 'formulario_mudanzas');
 add_shortcode('dommi_medicamentos', 'domicilio_medicamentos');
 add_shortcode('dommi_descargar', 'boton_descargar');
 add_shortcode('dommi_login', 'login_woo');
-add_action('wp_head', 'validador_sesiones_imagen');
+add_action('wp_footer', 'validador_sesiones_imagen');
 
 
 function your_function() {
