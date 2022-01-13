@@ -122,7 +122,9 @@ function validador_sesiones_imagen(){
 }
 
 function notificacion(){
-   
+    echo '<div class="alert alert-success" role="alert">
+    '."harvey".'
+  </div>';
     if(isset($_GET['info'])) {
       $mensaje=$_GET['info'];
       echo '<div class="alert alert-success" role="alert">

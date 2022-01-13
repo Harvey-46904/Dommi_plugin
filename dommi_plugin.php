@@ -1565,7 +1565,7 @@ $user = new WP_User($id_ultimo);
 $user->set_role('customer');
 
 //$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
-echo "<script>location.replace('https://dommi.net/login/?info=%Registro Exitoso%22');</script>";
+echo "<script>location.replace('https://dommi.net/login/?info=Registro%20Exitoso');</script>";
 
 
   }
