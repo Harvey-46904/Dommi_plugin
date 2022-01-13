@@ -1573,7 +1573,7 @@ function agregar_usuario_cliente(){
   
         //$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
         echo "<script>location.replace('https://dommi.net/login/?info=Registro%20Exitoso');</script>";
-      
+        wp_die();
       }else{
         echo '<div class="alert alert-danger" role="alert">
         El Nombre De Usuario O Email Ya Existen
