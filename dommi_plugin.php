@@ -104,7 +104,7 @@ function comprobar_sesion(){
 function formulario_mudanzas(){
     ob_start();
     ?>
-  <form id="form-mudanzas" style="display:none;" >
+  <form id="form-mudanzas" style="" >
       <div class="container">
           <div class="row">
               <div class="col-md-6">
