@@ -122,6 +122,7 @@ function validador_sesiones_imagen(){
 }
 
 function notificacion(){
+    ob_start();
     echo '<div class="alert alert-success" role="alert">
     '."harvey".'
   </div>';
@@ -131,4 +132,5 @@ function notificacion(){
       '.$mensaje.'
     </div>';
     }
+    return ob_get_clean();
 }
