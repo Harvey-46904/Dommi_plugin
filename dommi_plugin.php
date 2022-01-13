@@ -11,7 +11,7 @@ License: GPLv2
 require __DIR__ . '/vendor/autoload.php';
 require_once(ABSPATH.'wp-includes/pluggable.php');
 require_once(ABSPATH . 'wp-admin/includes/file.php');
-
+require 'registro_usuario.php';
 use Automattic\WooCommerce\Client;
 // Cuando el plugin se active se crea la tabla para recoger los datos si no existe
 register_activation_hook(__FILE__, 'tbl_domiciliarios');
@@ -72,6 +72,8 @@ add_shortcode('mensajero_dommi', 'registro_mensajero');
 add_shortcode('mensajero_dommi_cliente', 'agregar_usuario_cliente');
 add_shortcode('dommi_mudanza', 'formulario_mudanzas');
 add_shortcode('dommi_medicamentos', 'domicilio_medicamentos');
+add_shortcode('dommi_descargar', 'boton_descargar');
+add_shortcode('dommi_login', 'login_woo');
 
 
 function your_function() {
@@ -1163,7 +1165,7 @@ function move_file($file, $to){
 function registro_mensajero(){
   $fecha= date("Y-m-d-H-i-s");
   ob_start();
-      
+  echo isset($_FILES['upload-file']) ;
   global $wpdb;
  if ($_POST['name_user'] != ''
         AND $_POST['Nombre'] != ''
@@ -1174,22 +1176,27 @@ function registro_mensajero(){
         
         AND isset($_FILES['upload-file'])  
         AND isset($_FILES['upload-file1'])  
-        AND isset($_FILES['upload-file2'])      
+        AND isset($_FILES['upload-file2'])   
+        AND isset($_FILES['upload-file3'])     
         AND wp_verify_nonce($_POST['aspirante_nonce'], 'graba_aspirante')
     ){
       global $wp_filesystem;
       WP_Filesystem();
       $name_file = $_FILES['upload-file']['name'];
       $tmp_name = $_FILES['upload-file']['tmp_name'];
-      $nombres=$fecha."H".$name_file;
+      $nombres=$fecha."Cedula".$name_file;
 
       $name_file1 = $_FILES['upload-file1']['name'];
       $tmp_name1 = $_FILES['upload-file1']['tmp_name'];
-      $nombres1=$fecha."H".$name_file1;
+      $nombres1=$fecha."TPropiedad".$name_file1;
 
       $name_file2 = $_FILES['upload-file2']['name'];
       $tmp_name2 = $_FILES['upload-file2']['tmp_name'];
-      $nombres2=$fecha."H".$name_file2;
+      $nombres2=$fecha."Soat".$name_file2;
+
+      $name_file3 = $_FILES['upload-file3']['name'];
+      $tmp_name3 = $_FILES['upload-file3']['tmp_name'];
+      $nombres3=$fecha."HV".$name_file3;
 
       $allow_extensions = ['pdf', 'xlsx', 'csv'];
       
@@ -1197,12 +1204,14 @@ function registro_mensajero(){
       $path_parts = pathinfo($name_file);
       $path_parts1 = pathinfo($name_file1);
       $path_parts2 = pathinfo($name_file2);
+      $path_parts3 = pathinfo($name_file3);
       $ext = $path_parts['extension'];
       $ext1 = $path_parts1['extension'];
       $ext2 = $path_parts2['extension'];
+      $ext3 = $path_parts3['extension'];
   
-      if ( !in_array($ext, $allow_extensions) && !in_array($ext1, $allow_extensions) && !in_array($ext2, $allow_extensions) ) {
-        echo "Error -El tipo de archivo permitido es PDF";
+      if ( !in_array($ext, $allow_extensions) && !in_array($ext1, $allow_extensions) && !in_array($ext2, $allow_extensions) && !in_array($ext3, $allow_extensions) ) {
+        echo '<div class="alert alert-danger" role="alert">El tipo de archivo debe ser PDF</div>';
         return;
       }
   
@@ -1212,13 +1221,15 @@ function registro_mensajero(){
       if( 
         move_uploaded_file( $tmp_name, $content_directory .$nombres ) AND
         move_uploaded_file( $tmp_name1, $content_directory .$nombres1 ) AND
-        move_uploaded_file( $tmp_name2, $content_directory .$nombres2 ) 
+        move_uploaded_file( $tmp_name2, $content_directory .$nombres2 ) AND
+        move_uploaded_file( $tmp_name3, $content_directory .$nombres3 ) 
       ) {
         $adarchivos = array();
         $adarchivos = array(
           $content_directory .$nombres,
           $content_directory .$nombres1,
-          $content_directory .$nombres2
+          $content_directory .$nombres2,
+          $content_directory .$nombres3
 
       );
       $save_name_zip="Documentos-".$fecha.'.zip';
@@ -1233,7 +1244,8 @@ function registro_mensajero(){
       }
      
         } else {
-          echo "The file was not uploaded";
+          echo '<div class="alert alert-danger" role="alert">A ocurrido un error con la carga de archivos</div>';
+          return;
         }
 
 
@@ -1264,7 +1276,7 @@ function registro_mensajero(){
           echo "<script>location.replace('https://dommi.net/confirmacion-aspirante/');</script>";
     }else{
 
-    
+      
     ?>
     <div id="form-domicilios" >
     
@@ -1311,6 +1323,14 @@ function registro_mensajero(){
         <label style="color:#390066">Soat/Tecnomecánica </label><br>
         <input name="upload-file2" type="file" />
       </div>
+      <div class="form-group">
+        <label style="color:#390066">Hoja de vida</label><br>
+        <input name="upload-file3" type="file" />
+      </div>
+      <div class="alert alert-info" role="alert">
+      Recuerda que para ser tenido en cuenta es indispensable subir tu hoja de vida.
+      </div>
+      
     
     
     
