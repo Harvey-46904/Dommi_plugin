@@ -1537,42 +1537,57 @@ function agregar_usuario_cliente(){
     AND $_POST['contraseña'] != ''
     
   ){
-    
-    $nombre_usuario= sanitize_text_field($_POST['nombre_usuario']);
-    $nombres_completos= sanitize_text_field($_POST['nombres_completos']);
-    $telefono= sanitize_text_field($_POST['telefono']);
-    $telefono=intval($telefono);
-    $correo = sanitize_text_field($_POST['correo']);
-    $contraseña= sanitize_text_field($_POST['contraseña']);
     global $wpdb;
-    //$usuario = $wpdb->query("INSERT INTO `woocomerce`.`wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`,`user_phone`) VALUES (NULL, '".$nombre_usuario."', MD5('".$contraseña."'), '".$nombres_completos."', '".$correo."', '', '2011-06-07 00:00:00', '', '0', '".$nombres_completos."','".$telefono."');");
-    //$usuario = $wpdb->get_results(" SELECT LAST_INSERT_ID() as ids;");
+    $Us_login=$_POST['nombre_usuario'];
+    $Us_email=$_POST['correo'];
+    $usuario = $wpdb->get_results("SELECT * FROM `wp_users` WHERE `user_login`='".$Us_login."' OR `user_email`='".$Us_email."' ");
     
-   // $id_registrado=$usuario[0]->ids;
-   $user_login = wp_slash( $nombre_usuario );
-   $user_email = wp_slash( $correo );
-   $user_pass  = $contraseña;
+    if(empty($usuario) ){
+    
 
-   $userdata = compact( 'user_login', 'user_email', 'user_pass' );
-    $id_ultimo=wp_insert_user( $userdata );
-    
-//una vez se alla registrado actualizo tabla usuarios
-$usuario = $wpdb->query("UPDATE `wp_users` SET `user_nicename` = '".$nombres_completos."', `display_name` = '".$nombres_completos."', `user_phone` = '".$telefono."' WHERE `wp_users`.`ID` = ".$id_ultimo.";");
-//$id_registrado = $wpdb->get_results("SELECT `umeta_id` FROM `wp_usermeta` WHERE `user_id`=".$id_ultimo." AND `meta_key`='wp_capabilities;'");
+        $nombre_usuario= sanitize_text_field($_POST['nombre_usuario']);
+        $nombres_completos= sanitize_text_field($_POST['nombres_completos']);
+        $telefono= sanitize_text_field($_POST['telefono']);
+        $telefono=intval($telefono);
+        $correo = sanitize_text_field($_POST['correo']);
+        $contraseña= sanitize_text_field($_POST['contraseña']);
+       
+        //$usuario = $wpdb->query("INSERT INTO `woocomerce`.`wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`,`user_phone`) VALUES (NULL, '".$nombre_usuario."', MD5('".$contraseña."'), '".$nombres_completos."', '".$correo."', '', '2011-06-07 00:00:00', '', '0', '".$nombres_completos."','".$telefono."');");
+        //$usuario = $wpdb->get_results(" SELECT LAST_INSERT_ID() as ids;");
+        
+      // $id_registrado=$usuario[0]->ids;
+          $user_login = wp_slash( $nombre_usuario );
+          $user_email = wp_slash( $correo );
+          $user_pass  = $contraseña;
   
-$user = new WP_User($id_ultimo);
-
-$user->set_role('customer');
-
-//$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
-echo "<script>location.replace('https://dommi.net/login/?info=Registro%20Exitoso');</script>";
-
+          $userdata = compact( 'user_login', 'user_email', 'user_pass' );
+            $id_ultimo=wp_insert_user( $userdata );
+            
+        //una vez se alla registrado actualizo tabla usuarios
+        $usuario = $wpdb->query("UPDATE `wp_users` SET `user_nicename` = '".$nombres_completos."', `display_name` = '".$nombres_completos."', `user_phone` = '".$telefono."' WHERE `wp_users`.`ID` = ".$id_ultimo.";");
+        //$id_registrado = $wpdb->get_results("SELECT `umeta_id` FROM `wp_usermeta` WHERE `user_id`=".$id_ultimo." AND `meta_key`='wp_capabilities;'");
+          
+        $user = new WP_User($id_ultimo);
+  
+        $user->set_role('customer');
+  
+        //$usuario = $wpdb->query("UPDATE `wp_usermeta` SET `meta_value` = 'a' WHERE `wp_usermeta`.`umeta_id` =".$id_ultimo.";");
+        echo "<script>location.replace('https://dommi.net/login/?info=Registro%20Exitoso');</script>";
+      
+      }else{
+        echo '<div class="alert alert-danger" role="alert">
+        El Nombre De Usuario O Email Ya Existen
+      </div>';
+      }
+    
+     
 
   }
  
 
 
-else {
+
+  
   ?>
 <form action="<?php get_the_permalink(); ?>" method="POST" >
 <div class="form-group">
@@ -1601,7 +1616,7 @@ else {
 </form>
   <?php
   return ob_get_clean();
-}
+
  // 
 }
 
