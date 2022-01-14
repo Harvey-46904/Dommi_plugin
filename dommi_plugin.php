@@ -1167,21 +1167,29 @@ function move_file($file, $to){
 function registro_mensajero(){
   $fecha= date("Y-m-d-H-i-s");
   ob_start();
-  echo isset($_FILES['upload-file']) ;
+ 
   global $wpdb;
- if ($_POST['name_user'] != ''
-        AND $_POST['Nombre'] != ''
-        AND $_POST['Apellido'] != ''
-        AND $_POST['Celular'] != ''   
-        AND is_email($_POST['correo'])  
-        AND $_POST['Contraseña'] != ''     
-        
-        AND isset($_FILES['upload-file'])  
-        AND isset($_FILES['upload-file1'])  
-        AND isset($_FILES['upload-file2'])   
-        AND isset($_FILES['upload-file3'])     
-        AND wp_verify_nonce($_POST['aspirante_nonce'], 'graba_aspirante')
+ if (  
+    $_POST['name_user'] != ''
+    AND $_POST['Nombre'] != ''
+    AND $_POST['Apellido'] != ''
+    AND $_POST['Celular'] != ''   
+    AND is_email($_POST['correo'])  
+    AND $_POST['Contraseña'] != ''
+    AND $_POST['tipo_vehiculo'] != ''  
+    
+    AND wp_verify_nonce($_POST['aspirante_nonce'], 'graba_aspirante')
+    AND $_FILES['upload-file']['name'] != null
+    AND $_FILES['upload-file1']['name'] != null
+    AND $_FILES['upload-file2']['name'] != null
+    AND $_FILES['upload-file3']['name'] != null
     ){
+      $Us_login=$_POST['name_user'];
+      $Us_email=$_POST['correo'];
+      $usuario = $wpdb->get_results("SELECT * FROM `wp_users` WHERE `user_login`='".$Us_login."' OR `user_email`='".$Us_email."' ");
+      
+      if(empty($usuario) ){
+
       global $wp_filesystem;
       WP_Filesystem();
       $name_file = $_FILES['upload-file']['name'];
@@ -1214,12 +1222,10 @@ function registro_mensajero(){
   
       if ( !in_array($ext, $allow_extensions) && !in_array($ext1, $allow_extensions) && !in_array($ext2, $allow_extensions) && !in_array($ext3, $allow_extensions) ) {
         echo '<div class="alert alert-danger" role="alert">El tipo de archivo debe ser PDF</div>';
-        return;
+       
       }
-  
       $content_directory = $wp_filesystem->wp_content_dir() . 'uploads/archivos-subidos/';
       $wp_filesystem->mkdir( $content_directory );
-  
       if( 
         move_uploaded_file( $tmp_name, $content_directory .$nombres ) AND
         move_uploaded_file( $tmp_name1, $content_directory .$nombres1 ) AND
@@ -1247,7 +1253,7 @@ function registro_mensajero(){
      
         } else {
           echo '<div class="alert alert-danger" role="alert">A ocurrido un error con la carga de archivos</div>';
-          return;
+          
         }
 
 
@@ -1259,6 +1265,8 @@ function registro_mensajero(){
         $correo = sanitize_text_field($_POST['correo']);
         $Contraseña = sanitize_text_field($_POST['Contraseña']);
         $Documentos = sanitize_text_field($_POST['Documentos']);
+        $tipo_vehiculo= $_POST['tipo_vehiculo'];
+       
         $created_at = date('Y-m-d H:i:s');
         $wpdb->insert(
           $tabla_aspirantes,array(
@@ -1268,17 +1276,22 @@ function registro_mensajero(){
             'Celular'=>$Celular,
             'correo'=>$correo,
             'Contraseña'=>$Contraseña,
+            'Tipo_vehiculo'=>$tipo_vehiculo,
             'Documentos'=>$save_name_zip,
             'created_at'=>$created_at,
-
           )
           );
-        
-
           echo "<script>location.replace('https://dommi.net/confirmacion-aspirante/');</script>";
-    }else{
+          wp_die();
+        }else{
+          echo '<div class="alert alert-danger" role="alert">
+            El Nombre De Usuario O Email Ya Existen
+          </div>';
+          header("Location: ./");
+        }
+    }
 
-      
+     
     ?>
     <div id="form-domicilios" >
     
@@ -1314,6 +1327,15 @@ function registro_mensajero(){
       </div>
       <h3>Documentos de vehículo</h3>
       <div class="form-group">
+        <label for="exampleFormControlSelect1">Tipo de vehículo</label>
+        <select class="form-control" id="exampleFormControlSelect1" name="tipo_vehiculo">
+          <option>Moto</option>
+          <option>Carguero</option>
+          <option>Piaggio</option>
+          <option>Vehiculo</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label style="color:#390066">Cédula de Ciudadanía</label><br>
         <input name="upload-file" type="file" />
       </div>
@@ -1332,10 +1354,6 @@ function registro_mensajero(){
       <div class="alert alert-info" role="alert">
       Recuerda que para ser tenido en cuenta es indispensable subir tu hoja de vida.
       </div>
-      
-    
-    
-    
       <br>
       <button type="submit" class="btn btn-primary">REGISTRARSE</button>
     </form>
@@ -1346,7 +1364,7 @@ function registro_mensajero(){
   
     <?php
     return ob_get_clean();
-  }
+  
     // Devuelve el contenido del buffer de salida
 }
 
@@ -1533,7 +1551,7 @@ function agregar_usuario_cliente(){
     $_POST['nombre_usuario'] != ''
     AND $_POST['nombres_completos'] != ''
     AND $_POST['telefono'] != ''
-    AND $_POST['correo'] != ''
+    AND is_email($_POST['correo']) != ''
     AND $_POST['contraseña'] != ''
     
   ){
