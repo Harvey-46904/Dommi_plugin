@@ -1169,6 +1169,14 @@ function registro_mensajero(){
   ob_start();
  
   global $wpdb;
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+  if($_FILES['upload-file']['name'] == null
+    OR $_FILES['upload-file1']['name'] == null
+    OR $_FILES['upload-file2']['name'] == null
+    OR $_FILES['upload-file3']['name'] == null){
+    echo "Debe subir la documentación requerida para postularse";
+  }
+
  if (  
     $_POST['name_user'] != ''
     AND $_POST['Nombre'] != ''
@@ -1287,10 +1295,14 @@ function registro_mensajero(){
           echo '<div class="alert alert-danger" role="alert">
             El Nombre De Usuario O Email Ya Existen
           </div>';
-          header("Location: ./");
+          
         }
+    }else{
+      echo '<div class="alert alert-danger" role="alert">
+      Los Datos Ingresados Estan Vacios
+    </div>';
     }
-
+  }
      
     ?>
     <div id="form-domicilios" >
@@ -1409,7 +1421,7 @@ function Aspirante_admin()
        
         <th scope="col">Celular</th>
         <th scope="col">Correo</th>
-        <th scope="col">Contraseña</th>
+        <th scope="col">Vehículo</th>
         <th scope="col">Documentos</th>
         <th scope="col">Aprobar Aspirante</th>
       </tr>
@@ -1422,7 +1434,7 @@ function Aspirante_admin()
             
             echo '<td>'.$aspirante->Celular.'</td>';
             echo '<td>'.$aspirante->correo.'</td>';
-            echo '<td>'.md5($aspirante->Contraseña).'</td>';
+            echo '<td>'.$aspirante->Tipo_vehiculo.'</td>';
            // echo '<td>'.$aspirante->Documentos.'</td>';
            echo '<td><a href="../wp-content/zips/'.$aspirante->Documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
            echo '<td> <a id="boton-bonito" href="?page=allentries">Aprobar</a>'.'</td>';
