@@ -1446,7 +1446,7 @@ function Aspirante_admin()
         $id_ultimo=wp_insert_user( $userdata );
 
         
-        $sql="CALL `Agregar_wp_usermeta`(46904, '3226755570', 'moto')";
+        $sql="CALL `Agregar_wp_usermeta`(".$id_ultimo.", '".$tel."', '".$vehi."')";
         $sql = $wpdb->query($sql);
         
         $user = new WP_User($id_ultimo);
