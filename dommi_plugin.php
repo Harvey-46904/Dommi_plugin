@@ -63,6 +63,10 @@ CREATE TABLE IF NOT EXISTS wp_medicamentos (
         created_at datetime NOT NULL,
         UNIQUE (id)
         )
+
+      procedimientos
+
+      DROP PROCEDURE `Agregar_wp_usermeta`; CREATE DEFINER=`root`@`localhost` PROCEDURE `Agregar_wp_usermeta`(IN `id` INT(50), IN `telefono` VARCHAR(50), IN `vehiculo` VARCHAR(50)) DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER BEGIN INSERT INTO `wp_usermeta`(`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES ( '',id, 'billing_phone', telefono); INSERT INTO `wp_usermeta`(`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES ( '',id, 'lddfw_driver_travel_mode', 'DRIVING' ); INSERT INTO `wp_usermeta`(`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES ( '',id,'lddfw_driver_vehicle', vehiculo); END
 */
 add_shortcode('domicilios_dommi_moto', 'domicilio_Dommi_moto');
 add_shortcode('domicilio_Dommi_piagio', 'domicilio_Dommi_piagio');
@@ -1174,7 +1178,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     OR $_FILES['upload-file1']['name'] == null
     OR $_FILES['upload-file2']['name'] == null
     OR $_FILES['upload-file3']['name'] == null){
-    echo "Debe subir la documentación requerida para postularse";
+     
+    echo '<div class="alert alert-danger" role="alert">
+    Debe subir la documentación requerida para postularse
+    </div>';
   }
 
  if (  
@@ -1286,6 +1293,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             'Contraseña'=>$Contraseña,
             'Tipo_vehiculo'=>$tipo_vehiculo,
             'Documentos'=>$save_name_zip,
+            'estado'=>0,
             'created_at'=>$created_at,
           )
           );
@@ -1408,9 +1416,59 @@ function dommi_medicamentos()
 
 function Aspirante_admin()
 {
-    global $wpdb;
+  global $wpdb;
+  if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if($_POST["identificador"]!=''){
+      $user=$wpdb->get_results("SELECT * FROM `wp_dommis` WHERE `id`=".$_POST["identificador"].";");
+     
+      $name_user=$user[0]->name_user;
+      $correo=$user[0]->correo;
+      $pass=$user[0]->Contraseña;
+      $nombres_completos=$user[0]->Nombre." ".$user[0]->Apellido;
+      $vehi=$user[0]->Tipo_vehiculo;
+      $tel=$user[0]->Celular;
+      $wpdb->query("UPDATE `wp_dommis` SET `estado` = '1' WHERE `wp_dommis`.`id` = ".$_POST["identificador"].";");
+      
+     $userdata = array(
+        
+        'user_pass'             => $pass,   //(string) The plain-text user password.
+        'user_login'            => $name_user,   //(string) The user's login username.
+        'user_nicename'         => $nombres_completos,   //(string) The URL-friendly user name.
+        'user_email'            => $correo,   //(string) The user email address.
+        'display_name'          => $nombres_completos,   //(string) The user's display name. Default is the user's username.
+        'nickname'              => $name_user,   //(string) The user's nickname. Default is the user's username.
+        'first_name'            => $user[0]->Nombre,   //(string) The user's first name. For new users, will be used to build the first part of the user's display name if $display_name is not specified.
+        'last_name'             => $user[0]->Apellido  //(string) The user's last name. For new users, will be used to build the second part of the user's display name if $display_name is not specified. 
+        
+    );
+
+   
+        $id_ultimo=wp_insert_user( $userdata );
+
+        
+        $sql="CALL `Agregar_wp_usermeta`(46904, '3226755570', 'moto')";
+        $sql = $wpdb->query($sql);
+        
+        $user = new WP_User($id_ultimo);
+       
+        $user->set_role('driver');
+        echo '<div class="notice notice-success is-dismissible"> 
+        <p>Aspirante Agregado Correctamente</p>
+    </div>';
+    }
+    if($_POST["eliminar"]!=''){
+      $wpdb->query(" DELETE FROM `wp_dommis` WHERE `wp_dommis`.`id` = ".$_POST["eliminar"].";");
+      echo '<div class="notice notice-info is-dismissible"> 
+        <p>Aspirante Eliminado Correctamente</p>
+    </div>';
+    }
+   
+    
+    
+  }
+    
     $tabla_aspirantes = $wpdb->prefix . 'dommis';
-    $aspirantes = $wpdb->get_results("SELECT * FROM $tabla_aspirantes");
+    $aspirantes = $wpdb->get_results("SELECT * FROM $tabla_aspirantes WHERE `estado`=0 ");
    
     echo '<div class="wrap"><h1>Lista de aspirantes Dommi</h1>';
     echo '<table class="wp-list-table widefat fixed striped">
@@ -1424,6 +1482,8 @@ function Aspirante_admin()
         <th scope="col">Vehículo</th>
         <th scope="col">Documentos</th>
         <th scope="col">Aprobar Aspirante</th>
+
+        <th scope="col">Eliminar Aspirante</th>
       </tr>
     </thead>
     <tbody>';
@@ -1435,9 +1495,21 @@ function Aspirante_admin()
             echo '<td>'.$aspirante->Celular.'</td>';
             echo '<td>'.$aspirante->correo.'</td>';
             echo '<td>'.$aspirante->Tipo_vehiculo.'</td>';
+            
            // echo '<td>'.$aspirante->Documentos.'</td>';
            echo '<td><a href="../wp-content/zips/'.$aspirante->Documentos.'" class="btn btn-success">Descargar</a>'.'</td>';
-           echo '<td> <a id="boton-bonito" href="?page=allentries">Aprobar</a>'.'</td>';
+           echo '<td> 
+           <form action="'. get_the_permalink().'" method="POST" >
+           <input type="text" style="display:none;" name="identificador" value="'.$aspirante->id.'" />
+            <button type="submit" class="btn btn-primary">Aprobar</button>
+           </form>
+           '.'</td>';
+           echo '<td> 
+           <form action="'. get_the_permalink().'" method="POST" >
+           <input type="text" style="display:none;" name="eliminar" value="'.$aspirante->id.'" />
+            <button type="submit" class="btn btn-primary">Eliminar</button>
+           </form>
+           '.'</td>';
          echo '</tr>';
        }
        echo   '</tbody></table>';
