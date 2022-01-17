@@ -80,6 +80,8 @@ add_shortcode('dommi_descargar', 'boton_descargar');
 add_shortcode('dommi_login', 'login_woo');
 add_shortcode('dommi_notificacion', 'notificacion');
 add_action('wp_footer', 'validador_sesiones_imagen');
+add_action('wp_footer', 'mostrar_letrero');
+
 
 
 function your_function() {
@@ -935,7 +937,7 @@ function domicilio_Dommi_vehiculos(){
                 $deseo=$deseo_domivehiculo;
                 $nombre_recibe= $recibe_domivehiculo;
                 $apellido_recibe="";
-                $entrega=$direntrega_domivehiculo;
+                $entrega=$notas_domivehiculo;
                 
                 agregar_domicilio($tipo,$nombres,$apellidos,$contacto,$email,$recogida,$deseo,$nombre_recibe,$apellido_recibe,$entrega);
                $comprobador=2;
