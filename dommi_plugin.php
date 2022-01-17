@@ -581,7 +581,8 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
   
         $data = [
             'payment_method' => 'bacs',
-            'payment_method_title' => 'nequi',
+            'payment_method_title' => 'Efectivo',
+            'customer_note'=>'El pepe',
             'set_paid' => false,
             'billing' => [
                 'first_name' => $nombres,
@@ -626,7 +627,7 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
 
 
   $id_pedido=$pedido->id;
-$mensaje_nota="Deseo".$deseo .",Notas/observaciones". $entrega;
+$mensaje_nota="Deseo ".$deseo .",Notas/observaciones ". $entrega;
   $data = [
     'note' => $mensaje_nota
     ];
