@@ -1728,7 +1728,7 @@ function wpb_demo_shortcode() {
 
   $result = $wpdb->get_results(
     $wpdb->prepare(
-      ' select mt.user_id, IFNULL( mt4.meta_value, "" ) as seller from ' . $wpdb->base_prefix . 'users u
+      ' select mt.*,mt.user_id, IFNULL( mt4.meta_value, "" ) as seller from ' . $wpdb->base_prefix . 'users u
       inner join ' . $wpdb->base_prefix . 'usermeta mt on mt.user_id = u.id and mt.meta_key = \'' . $wpdb->prefix . 'capabilities\'
       inner join ' . $wpdb->base_prefix . 'usermeta mt1 on mt1.user_id = u.id and mt1.meta_key = \'lddfw_driver_availability\'
       inner join ' . $wpdb->base_prefix . 'usermeta mt2 on mt2.user_id = u.id and mt2.meta_key = \'lddfw_driver_account\'
