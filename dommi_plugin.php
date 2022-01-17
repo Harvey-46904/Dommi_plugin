@@ -1737,6 +1737,8 @@ function wpb_demo_shortcode() {
   echo "azar ".$tam." <br>";
   
   print_r($result[$tam]);
+
+  print_r($result);
   
 } 
 function buscar_domiciliario($tipo_vehiculo){
