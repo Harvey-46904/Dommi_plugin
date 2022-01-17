@@ -126,9 +126,8 @@ echo '<script>
 window.onload=function() {
     var msj = jQuery(location).attr("href");
     if( msj == "https://dommi.net/?page=dokan-seller-setup&step=payment"){
-    jQuery(".mensaje_pagos").show()
+         jQuery(".mensaje_pagos").show();
     }
-    };
 }
 
 </script>';
