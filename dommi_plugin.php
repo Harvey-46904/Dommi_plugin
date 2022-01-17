@@ -1775,7 +1775,7 @@ function buscar_domiciliario($tipo_vehiculo){
         and mt.meta_value <> \'\' and mt.meta_value <> \'-1\'
       ) t on t.driver_id = mt.user_id
       where
-      mt0.meta_value ='.$vehiculo.' and
+      mt0.meta_value =\'Piaggio\' and
       mt.meta_value like %s and mt1.meta_value = \'1\' and mt2.meta_value = \'1\'
       group by mt.user_id
       order by count(t.orders) , mt3.meta_value
