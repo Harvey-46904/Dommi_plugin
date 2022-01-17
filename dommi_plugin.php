@@ -570,20 +570,13 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
 {
   $id_driver=0;
  
-  switch ($tipo) {
-    case "Vehiculo":
-        $id_driver="64";
-        break;
-    case "Piaggio":
-        $id_driver="62";
-        break;
-    case "Carguero":
-      $id_driver="63";
-        break;
-        case "Moto":
-          $id_driver="59";
-          break;
-}
+  $result = buscar_domiciliario($tipo);
+  $tam= sizeof($result);
+  $tam=$tam-1;
+  $tam = $tam==-1 ? 0 : $tam;
+  $tam=rand(0, $tam);
+  $id_driver_ok=$result[$tam]->user_id;
+  $id_driver=$id_driver_ok;
 
   
         $data = [
@@ -1724,22 +1717,12 @@ function agregar_usuario_cliente(){
 
 
 function wpb_demo_shortcode() { 
- 
-
   $result = buscar_domiciliario("Moto");
- 
   $tam= sizeof($result);
   $tam=$tam-1;
-  
   $tam = $tam==-1 ? 0 : $tam;
-  echo $tam."<br>";
   $tam=rand(0, $tam);
-  echo "azar ".$tam." <br>";
-  
-  print_r($result[$tam]);
-
-  print_r($result);
-  
+  $id_driver_ok=$result[$tam]->user_id;
 } 
 function buscar_domiciliario($tipo_vehiculo){
   global $wpdb;
