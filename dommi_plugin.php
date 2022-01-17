@@ -1724,11 +1724,41 @@ function agregar_usuario_cliente(){
 
 
 function wpb_demo_shortcode() { 
-  global $wpdb;
+ 
 
+  $result = buscar_domiciliario("Piaggio");
+ 
+  $tam= sizeof($result);
+  $tam=$tam-1;
+  
+  $tam = $tam==-1 ? 0 : $tam;
+  echo $tam."<br>";
+  $tam=rand(0, $tam);
+  echo "azar ".$tam." <br>";
+  
+  print_r($result[$tam]);
+  
+} 
+function buscar_domiciliario($tipo_vehiculo){
+  global $wpdb;
+  $vehiculo="";
+  switch ($tipo_vehiculo) {
+    case "Vehiculo":
+        $vehiculo=$tipo_vehiculo;
+        break;
+    case "Piaggio":
+        $vehiculo=$tipo_vehiculo;
+        break;
+    case "Carguero":
+      $vehiculo=$tipo_vehiculo;
+        break;
+        case "Moto":
+      $vehiculo=$tipo_vehiculo;
+        break;
+}
   $result = $wpdb->get_results(
     $wpdb->prepare(
-      ' select mt0.*,mt.user_id, IFNULL( mt4.meta_value, "" ) as seller from ' . $wpdb->base_prefix . 'users u
+      ' select mt.user_id, IFNULL( mt4.meta_value, "" ) as seller from ' . $wpdb->base_prefix . 'users u
       inner join ' . $wpdb->base_prefix . 'usermeta mt on mt.user_id = u.id and mt.meta_key = \'' . $wpdb->prefix . 'capabilities\'
       inner join ' . $wpdb->base_prefix . 'usermeta mt0 on mt0.user_id = u.id and mt0.meta_key = \'lddfw_driver_vehicle\'
       inner join ' . $wpdb->base_prefix . 'usermeta mt1 on mt1.user_id = u.id and mt1.meta_key = \'lddfw_driver_availability\'
@@ -1745,7 +1775,7 @@ function wpb_demo_shortcode() {
         and mt.meta_value <> \'\' and mt.meta_value <> \'-1\'
       ) t on t.driver_id = mt.user_id
       where
-      mt0.meta_value =\'Piaggio\' and
+      mt0.meta_value ='.$vehiculo.' and
       mt.meta_value like %s and mt1.meta_value = \'1\' and mt2.meta_value = \'1\'
       group by mt.user_id
       order by count(t.orders) , mt3.meta_value
@@ -1759,16 +1789,9 @@ function wpb_demo_shortcode() {
       )
     )
   );
- 
-  $tam= sizeof($result);
-  for ($i = 0; $i <= $tam-1; $i++) {
-    foreach($result[$i] as $res){
-      print $res;
-    }
-    echo "<br>";
-  }
-  
-  } 
+  return $result;
+
+}
   // register shortcode
   add_shortcode('greeting', 'wpb_demo_shortcode'); 
 
