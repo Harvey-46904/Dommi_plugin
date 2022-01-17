@@ -1724,24 +1724,17 @@ function agregar_usuario_cliente(){
 
 
 function wpb_demo_shortcode() { 
-  /*
-  $woocommerce = new Client(
-    'https://dommi.net/', 
-    'ck_ae1b5bce8346b9fe963511a6cfca17512a98f364', 
-    'cs_5f9d813b3fa984ed646fcca5451587863cb958c4',
-    [
-        'version' => 'wc/v3',
-    ]
-);
-  print_r($woocommerce->get('orders')); 
-   */
-  $order_id="423";
-  $order = new WC_Order($order_id);
-  echo $order->lddfw_driverid;
-  print_r($order);
-  assign_delivery_driver($order_id,60,'store');
-  // Output needs to be return
-  return "hola";
+  global $wpdb;
+  $result=$wpdb->get_results( $wpdb->prepare("SELECT * from `wp_dommis`;"));
+ 
+  $tam= sizeof($result);
+  for ($i = 0; $i <= $tam-1; $i++) {
+    foreach($result[$i] as $res){
+      print $res;
+    }
+    echo "<br>";
+  }
+  
   } 
   // register shortcode
   add_shortcode('greeting', 'wpb_demo_shortcode'); 
