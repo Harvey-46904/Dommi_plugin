@@ -577,12 +577,12 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
   $tam=rand(0, $tam);
   $id_driver_ok=$result[$tam]->user_id;
   $id_driver=$id_driver_ok;
-
+  $mensaje_nota="Deseo: ".$deseo .",Notas/observaciones: ". $entrega;
   
         $data = [
             'payment_method' => 'bacs',
             'payment_method_title' => 'Efectivo',
-            'customer_note'=>'El pepe',
+            'customer_note'=>$mensaje_nota,
             'set_paid' => false,
             'billing' => [
                 'first_name' => $nombres,
@@ -627,7 +627,7 @@ function agregar_domicilio( $tipo,$nombres,$apellidos,$contacto,$email,$recogida
 
 
   $id_pedido=$pedido->id;
-$mensaje_nota="Deseo ".$deseo .",Notas/observaciones ". $entrega;
+  
   $data = [
     'note' => $mensaje_nota
     ];
