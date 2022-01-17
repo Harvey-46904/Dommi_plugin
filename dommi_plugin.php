@@ -1725,7 +1725,38 @@ function agregar_usuario_cliente(){
 
 function wpb_demo_shortcode() { 
   global $wpdb;
-  $result=$wpdb->get_results( $wpdb->prepare("SELECT * from `wp_dommis`;"));
+
+  $result = $wpdb->get_results(
+    $wpdb->prepare(
+      ' select mt.user_id, IFNULL( mt4.meta_value, "" ) as seller from ' . $wpdb->base_prefix . 'users u
+      inner join ' . $wpdb->base_prefix . 'usermeta mt on mt.user_id = u.id and mt.meta_key = \'' . $wpdb->prefix . 'capabilities\'
+      inner join ' . $wpdb->base_prefix . 'usermeta mt1 on mt1.user_id = u.id and mt1.meta_key = \'lddfw_driver_availability\'
+      inner join ' . $wpdb->base_prefix . 'usermeta mt2 on mt2.user_id = u.id and mt2.meta_key = \'lddfw_driver_account\'
+      left join ' . $wpdb->base_prefix . 'usermeta mt3 on mt3.user_id = u.id and mt3.meta_key = \'lddfw_assigned_date\'
+      left join ' . $wpdb->base_prefix . 'usermeta mt4 on mt4.user_id = u.id and mt4.meta_key = \'ddfwm_vendor\'
+      left join (
+        select mt.meta_value as driver_id ,p.ID as orders
+        from ' . $wpdb->prefix . 'posts p
+        inner join ' . $wpdb->prefix . 'postmeta mt on mt.post_id = p.ID
+        where post_type = \'shop_order\' and
+        post_status in (%s,%s,%s,%s)
+        and mt.meta_key = \'lddfw_driverid\'
+        and mt.meta_value <> \'\' and mt.meta_value <> \'-1\'
+      ) t on t.driver_id = mt.user_id
+      where
+      mt.meta_value like %s and mt1.meta_value = \'1\' and mt2.meta_value = \'1\'
+      group by mt.user_id
+      order by count(t.orders) , mt3.meta_value
+      ',
+      array(
+        get_option( 'lddfw_driver_assigned_status', '' ),
+        get_option( 'lddfw_processing_status', '' ),
+        get_option( 'lddfw_out_for_delivery_status', '' ),
+        get_option( 'lddfw_failed_attempt_status', '' ),
+        '%\"driver\"%',
+      )
+    )
+  );
  
   $tam= sizeof($result);
   for ($i = 0; $i <= $tam-1; $i++) {
