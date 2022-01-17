@@ -122,11 +122,11 @@ function validador_sesiones_imagen(){
 }
 
 function mostrar_letrero(){
-echo 'var msj = jQuery(location).attr("href");
+echo '<script>var msj = jQuery(location).attr("href");
 if( msj == "https://dommi.net/?page=dokan-seller-setup&step=payment"){
 jQuery(".mensaje_pagos").show()
 }
-}';
+};</script>';
 
 }
 
